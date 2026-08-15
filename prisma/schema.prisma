@@ -1,0 +1,94 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           Int    @id @default(autoincrement())
+  username     String @unique
+  passwordHash String
+  pets         Pet[]
+}
+
+model Pet {
+  id        Int        @id @default(autoincrement())
+  name      String
+  species   String
+  gender    String?
+  breed     String?
+  age       Int?
+  weight    Decimal?
+  notes     String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  meals     Meal[]
+  weights   Weight[]
+  vetVisits VetVisit[]
+  reminders Reminder[]
+  photos    Photo[]
+  userId    Int
+  user      User       @relation(fields: [userId], references: [id])
+}
+
+model Meal {
+  id        Int      @id @default(autoincrement())
+  name      String
+  amount    String?
+  notes     String?
+  createdAt DateTime @default(now())
+  petId     Int
+  pet       Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+}
+
+model Weight {
+  id        Int      @id @default(autoincrement())
+  weight    Decimal
+  notes     String?
+  createdAt DateTime @default(now())
+  petId     Int
+  pet       Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+}
+
+model VetVisit {
+  id        Int       @id @default(autoincrement())
+  reason    String
+  vetName   String?
+  visitDate DateTime
+  nextVisit DateTime?
+  notes     String?
+  createdAt DateTime  @default(now())
+  petId     Int
+  pet       Pet       @relation(fields: [petId], references: [id], onDelete: Cascade)
+}
+
+model Reminder {
+  id        Int      @id @default(autoincrement())
+  title     String
+  type      String
+  remindAt  DateTime @db.Time()
+  days      String[]
+  isActive  Boolean @default(true)
+  createdAt DateTime @default(now())
+  petId     Int
+  pet       Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+}
+
+model Photo {
+  id         Int      @id @default(autoincrement())
+  url        String
+  storageKey String
+  title      String?
+  size       Int?
+  createdAt  DateTime @default(now())
+  petId      Int
+  pet        Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+}
