@@ -48,10 +48,10 @@ router.post('/login', async (req, res) => {
       }
     })
 
-    const isMatch = await bcrypt.compare(password, user.hashedPassword)
+    const isMatch = await bcrypt.compare(password, user.password)
 
     if (!isMatch) {
-      return res.status(400).json({ error: "Nigga access your own account!" })
+      return res.status(400).json({ error: "Invalid credentials, Nigga!" })
     } 
 
     const token = jwt.sign({ user: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' })
