@@ -22,7 +22,7 @@ router.post('/register', async (req, res) => {
       }
     })
 
-    const token = jwt.sign({ user: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' })
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' })
     res.json({ token })
 
   } catch (error) {
@@ -54,7 +54,7 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: "Invalid credentials, Nigga!" })
     } 
 
-    const token = jwt.sign({ user: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' })
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' })
     res.json({ token })
   } catch (error) {
     console.log(error.message)
