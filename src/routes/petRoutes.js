@@ -3,10 +3,11 @@ import prisma from '../lib/prisma.js'
 
 const router = express.Router()
 
+// CREATE a pet
 router.post('/pets', async (req, res) => {
   const { name, species, gender, breed, age, weight, notes } = req.body
 
-  if (!name || !species) return res.status(400).json({ error: "Name and species are required!" })
+  if (!name || !species) return res.status(400).json({ message: "Name and species are required!" })
 
   try {
     const pet = await prisma.pet.create({
@@ -24,10 +25,11 @@ router.post('/pets', async (req, res) => {
 
     res.status(201).json(pet)
   } catch (error) {
-    return res.status(500).json({ error: "Something went wrong!" })
+    return res.status(500).json({ message: "Something went wrong!" })
   }
 })
 
+// SEE all pets
 router.get('/pets', async (req, res) => {
 
   try {
@@ -39,10 +41,11 @@ router.get('/pets', async (req, res) => {
 
     res.json(pets)
   } catch (error) {
-    return res.status(500).json({ error: "Something went wrong!" })
+    return res.status(500).json({ message: "Something went wrong!" })
   }
 })
 
+// SEE a pet
 router.get('/pets/:id', async (req, res) => {
 
   try {
@@ -53,15 +56,16 @@ router.get('/pets/:id', async (req, res) => {
       }
     })
 
-    if (!pet) return res.status(404).json({ error: "Pet not found!" })
+    if (!pet) return res.status(404).json({ message: "Pet not found!" })
 
     res.json(pet)
   } catch (error) {
-    return res.status(500).json({ error: "Something went wrong!" })
+    return res.status(500).json({ message: "Something went wrong!" })
   }
 
 })
 
+// UPDATE a pet
 router.patch('/pets/:id', async (req, res) => {
   const { name, species, gender, breed, age, weight, notes } = req.body
 
@@ -76,13 +80,13 @@ router.patch('/pets/:id', async (req, res) => {
     res.json({ message: "Pet Successfully updated!", data: updatePet })
   } catch (error) {
     if (error.code === 'P2025') {
-      return res.status(404).json({ error: 'Pet not found!' })
+      return res.status(404).json({ message: 'Pet not found!' })
     }
-    console.log(error.message)
-    res.status(500).json({ error: 'Something went wrong' })
+    res.status(500).json({ message: 'Something went wrong' })
   }
 })
 
+// DELETE a pet
 router.delete('/pets/:id', async (req, res) => {
   try {
 
@@ -97,10 +101,9 @@ router.delete('/pets/:id', async (req, res) => {
 
   } catch (error) {
     if (error.code === 'P2025') {
-      return res.status(404).json({ error: 'Pet not found!' })
+      return res.status(404).json({ message: 'Pet not found!' })
     }
-    console.log(error.message)
-    res.status(500).json({ error: 'Something went wrong' })
+    res.status(500).json({ message: 'Something went wrong' })
   }
 })
 
