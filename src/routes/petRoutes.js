@@ -23,8 +23,9 @@ router.post('/pets', async (req, res) => {
       }
     })
 
-    res.status(201).json(pet)
+    res.status(201).json({ data: pet })
   } catch (error) {
+    console.error(error)
     return res.status(500).json({ message: "Something went wrong!" })
   }
 })
@@ -39,8 +40,9 @@ router.get('/pets', async (req, res) => {
       }
     })
 
-    res.json(pets)
+    res.json({ data: pets })
   } catch (error) {
+    console.error(error)
     return res.status(500).json({ message: "Something went wrong!" })
   }
 })
@@ -58,8 +60,9 @@ router.get('/pets/:id', async (req, res) => {
 
     if (!pet) return res.status(404).json({ message: "Pet not found!" })
 
-    res.json(pet)
+    res.json({ data: pet })
   } catch (error) {
+    console.error(error)
     return res.status(500).json({ message: "Something went wrong!" })
   }
 
@@ -79,6 +82,7 @@ router.patch('/pets/:id', async (req, res) => {
 
     res.json({ message: "Pet Successfully updated!", data: updatePet })
   } catch (error) {
+    console.error(error)
     if (error.code === 'P2025') {
       return res.status(404).json({ message: 'Pet not found!' })
     }
@@ -100,6 +104,7 @@ router.delete('/pets/:id', async (req, res) => {
     res.json({ message: "Pet successfully deleted!" })
 
   } catch (error) {
+    console.error(error)
     if (error.code === 'P2025') {
       return res.status(404).json({ message: 'Pet not found!' })
     }

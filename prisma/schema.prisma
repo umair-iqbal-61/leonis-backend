@@ -46,6 +46,7 @@ model Meal {
   amount    String?
   notes     String?
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   petId     Int
   pet       Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
 }
@@ -55,6 +56,7 @@ model Weight {
   weight    Decimal
   notes     String?
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   petId     Int
   pet       Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
 }
@@ -67,6 +69,7 @@ model VetVisit {
   nextVisit DateTime?
   notes     String?
   createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   petId     Int
   pet       Pet       @relation(fields: [petId], references: [id], onDelete: Cascade)
 }
@@ -79,6 +82,7 @@ model Reminder {
   days      String[]
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   petId     Int
   pet       Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
 }
