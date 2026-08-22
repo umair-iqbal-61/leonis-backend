@@ -39,14 +39,15 @@ router.post('/vetvisits', async (req, res) => {
   }
 })
 
-// SEE all vetvisits for specific pet
+// GET all vetvisits for specific pet
 router.get('/vetvisits', async (req, res) => {
 
   try {
     const allVetVisits = await prisma.vetVisit.findMany({
       where: {
         petId: req.pet.id
-      }
+      },
+      orderBy: { createdAt: 'desc' }
     })
 
     res.json({ data: allVetVisits })
@@ -56,7 +57,7 @@ router.get('/vetvisits', async (req, res) => {
   }
 })
 
-// SEE a specific vetvisit for specific pet
+// GET a specific vetvisit for specific pet
 router.get('/vetvisits/:vetVisitId', async (req, res) => {
   try {
     const vetVisit = await prisma.vetVisit.findUnique({

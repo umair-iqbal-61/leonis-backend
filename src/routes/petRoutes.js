@@ -30,14 +30,15 @@ router.post('/pets', async (req, res) => {
   }
 })
 
-// SEE all pets
+// GET all pets
 router.get('/pets', async (req, res) => {
 
   try {
     const pets = await prisma.pet.findMany({
       where: {
         userId: req.user.userId
-      }
+      },
+      orderBy: { createdAt: 'desc' }
     })
 
     res.json({ data: pets })
@@ -47,7 +48,7 @@ router.get('/pets', async (req, res) => {
   }
 })
 
-// SEE a pet
+// GET a pet
 router.get('/pets/:id', async (req, res) => {
 
   try {

@@ -25,14 +25,15 @@ router.post('/weights', async (req, res) => {
   }
 })
 
-// SEE all weights for specific pet
+// GET all weights for specific pet
 router.get('/weights', async (req, res) => {
 
   try {
     const weights = await prisma.weight.findMany({
       where: {
         petId: req.pet.id
-      }
+      },
+      orderBy: { createdAt: 'desc' }
     })
 
     res.json({ data: weights })
@@ -42,7 +43,7 @@ router.get('/weights', async (req, res) => {
   }
 })
 
-// SEE a specific weight for specific pet
+// GET a specific weight for specific pet
 router.get('/weights/:weightId', async (req, res) => {
   try {
     const weight = await prisma.weight.findUnique({

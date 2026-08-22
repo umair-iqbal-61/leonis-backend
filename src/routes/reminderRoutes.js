@@ -34,14 +34,15 @@ router.post('/reminders', async (req, res) => {
   }
 })
 
-// SEE all reminders for specific pet
+// GET all reminders for specific pet
 router.get('/reminders', async (req, res) => {
 
   try {
     const allReminders = await prisma.reminder.findMany({
       where: {
         petId: req.pet.id
-      }
+      },
+      orderBy: { createdAt: 'desc' }
     })
 
     res.json({ data: allReminders })
@@ -51,7 +52,7 @@ router.get('/reminders', async (req, res) => {
   }
 })
 
-// SEE a specific reminder for specific pet
+// GET a specific reminder for specific pet
 router.get('/reminders/:reminderId', async (req, res) => {
   try {
     const reminder = await prisma.reminder.findUnique({

@@ -26,14 +26,15 @@ router.post('/meals', async (req, res) => {
   }
 })
 
-// SEE all meals for specific pet
+// GET all meals for specific pet
 router.get('/meals', async (req, res) => {
 
   try {
     const meals = await prisma.meal.findMany({
       where: {
         petId: req.pet.id
-      }
+      },
+      orderBy: { createdAt: 'desc' }
     })
 
     res.json({ data: meals })
@@ -43,7 +44,7 @@ router.get('/meals', async (req, res) => {
   }
 })
 
-// SEE a specific meal for specific pet
+// GET a specific meal for specific pet
 router.get('/meals/:mealId', async (req, res) => {
   try {
     const meal = await prisma.meal.findUnique({
