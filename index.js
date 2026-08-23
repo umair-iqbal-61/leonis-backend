@@ -12,6 +12,7 @@ import reminderRoutes from './src/routes/reminderRoutes.js'
 import userAllRemindersRoute from './src/routes/userAllRemindersRoute.js'
 import photoRoutes from './src/routes/photoRoutes.js'
 import avatarRoutes from './src/routes/avatarRoutes.js'
+import chatRoutes from './src/routes/chatRoutes.js'
 
 const app = express()
 const PORT = process.env.PORT || 7461
@@ -31,6 +32,8 @@ app.use('/api/pets/:petId', validateToken, verifyPetOwnership, reminderRoutes)
 
 app.use('/api/pets/:petId', validateToken, verifyPetOwnership, photoRoutes)
 app.use('/api/pets/:petId', validateToken, verifyPetOwnership, avatarRoutes)
+
+app.use('/api/pets/:petId', validateToken, verifyPetOwnership, chatRoutes)
 
 app.use('/api', validateToken, userAllRemindersRoute)
 
