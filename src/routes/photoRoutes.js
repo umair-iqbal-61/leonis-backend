@@ -6,7 +6,7 @@ import cloudinary from '../lib/cloudinary.js'
 const router = express.Router()
 const upload = multer({ storage: multer.memoryStorage() })
 
-// ADD a photo to the database
+// ADD a photo to the pet
 router.post('/photos', upload.single('photo'), async (req, res) => {
   if (!req.file) return res.status(400).json({ message: "No photo uploaded!" })
 
