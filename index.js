@@ -17,7 +17,9 @@ import chatRoutes from './src/routes/chatRoutes.js'
 const app = express()
 const PORT = process.env.PORT || 7461
 
-app.use(cors())
+app.use(cors({
+  origin: ['https://pawpal.umairiqbal.tech', 'http://localhost:5173']
+}))
 
 app.use(express.json())
 
