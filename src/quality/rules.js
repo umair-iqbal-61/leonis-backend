@@ -36,6 +36,10 @@ function similar(a, b) {
   for (let i = 0; i < a.length; i++) {
     if (a[i] === b[i + offset]) continue
     if (++differences > 1) return false
+    if (a.length === b.length && a[i] === b[i + 1] && a[i + 1] === b[i]) {
+      i++
+      continue
+    }
     if (a.length < b.length) {
       offset = 1
       i--
@@ -131,7 +135,7 @@ export function assess(animal, { asOf, baseline = false }) {
   const groups = [
     ['meal', animal.meals, 'createdAt', ['name', 'amount', 'createdAt'], item => normalized(item.name)],
     ['vetVisit', animal.vetVisits, 'visitDate', ['reason', 'vetName', 'visitDate'], item => normalized(item.reason)],
-    ['dairy', dairy, 'recordedOn', ['kind', 'recordedOn', 'liters'], item => item.kind],
+    ['dairy', dairy, 'recordedOn', ['kind', 'recordedOn', 'liters', 'session'], item => item.kind],
   ]
   for (const [type, entries, dateField, fields, label] of groups) {
     const sorted = entries.filter(entry => Number.isFinite(timestamp(entry[dateField])))
@@ -140,9 +144,15 @@ export function assess(animal, { asOf, baseline = false }) {
       const first = sorted[i]
       for (let j = i + 1; j < sorted.length; j++) {
         const second = sorted[j]
-        if (Math.floor(timestamp(first[dateField]) / day) !== Math.floor(timestamp(second[dateField]) / day)) break
+        const gap = timestamp(second[dateField]) - timestamp(first[dateField])
+        if (type === 'meal') {
+          if (gap > 15 * 60_000) break
+        } else if (Math.floor(timestamp(first[dateField]) / day) !== Math.floor(timestamp(second[dateField]) / day)) {
+          break
+        }
         if (!similar(label(first), label(second))) continue
         if (type === 'dairy') {
+          if (first.kind === 'MILK_YIELD' && first.session && second.session && first.session !== second.session) continue
           const firstVolume = first.liters == null ? null : Number(first.liters)
           const secondVolume = second.liters == null ? null : Number(second.liters)
           if (firstVolume !== secondVolume) continue

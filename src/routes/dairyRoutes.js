@@ -6,17 +6,21 @@ const router = Router()
 const kinds = ['MILK_YIELD', 'BREEDING', 'CALVING']
 
 function dairyData(body) {
-  const { kind, recordedOn, liters, notes } = body ?? {}
+  const { kind, recordedOn, liters, notes, session } = body ?? {}
   if (!kinds.includes(kind) || typeof recordedOn !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(recordedOn)) return null
   const date = new Date(recordedOn)
   if (!Number.isFinite(date.getTime()) || date.toISOString().slice(0, 10) !== recordedOn) return null
   if (notes != null && (typeof notes !== 'string' || notes.length > 2000)) return null
+  if (session != null && session !== '' && !['MORNING', 'AFTERNOON', 'EVENING'].includes(session)) return null
   let volume = null
   if (kind === 'MILK_YIELD' && liters != null && liters !== '') {
     if (!['string', 'number'].includes(typeof liters) || !/^-?\d{1,8}(?:\.\d{1,4})?$/.test(String(liters))) return null
     volume = String(liters)
   }
-  return { kind, recordedOn: date, liters: volume, notes: notes?.trim() || null }
+  const data = { kind, recordedOn: date, liters: volume, notes: notes?.trim() || null }
+  if (kind !== 'MILK_YIELD') data.session = null
+  else if (session !== undefined) data.session = session || null
+  return data
 }
 
 router.use('/dairy', (req, res, next) => {

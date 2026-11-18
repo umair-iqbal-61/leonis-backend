@@ -121,6 +121,7 @@ model DairyRecord {
   kind          DairyRecordKind
   recordedOn    DateTime        @db.Date
   liters        Decimal?
+  session       String?
   notes         String?
   @@index([petId, recordedOn])
 }

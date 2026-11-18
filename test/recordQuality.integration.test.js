@@ -64,6 +64,29 @@ test('owner can review and resolve automatically refreshed findings', { skip: !a
     assert.equal(report.counts.active, 0)
     assert.equal(report.counts.resolved, 1)
     assert.equal(report.findings[0].id, finding.id)
+    await request(base + '/dairy/' + stored.id, {
+      token, method: 'PUT', body: { ...record, liters: 12, session: 'MORNING' },
+    })
+    const evening = await request(base + '/dairy', {
+      token, method: 'POST', expected: 201, body: { ...record, liters: 12, session: 'EVENING' },
+    })
+    assert.equal((await request(base + '/quality', { token })).counts.active, 0)
+    const preserved = await request(base + '/dairy/' + stored.id, {
+      token, method: 'PUT', body: { ...record, liters: 12 },
+    })
+    assert.equal(preserved.session, 'MORNING')
+    await request(base + '/dairy/' + evening.id, {
+      token, method: 'PUT', expected: 400, body: { ...record, liters: 12, session: 'INVALID' },
+    })
+    await request(base + '/dairy/' + evening.id, {
+      token, method: 'PUT', body: { ...record, liters: 12, session: 'MORNING' },
+    })
+    const duplicateReport = await request(base + '/quality', { token })
+    assert.equal(duplicateReport.findings.filter(item => item.active && item.ruleId === 'duplicate').length, 1)
+    const cleared = await request(base + '/dairy/' + evening.id, {
+      token, method: 'PUT', body: { ...record, liters: 12, session: null },
+    })
+    assert.equal(cleared.session, null)
   } finally {
     await request(base, { token, method: 'DELETE' })
   }

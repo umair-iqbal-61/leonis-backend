@@ -3,7 +3,7 @@ const fieldsByType = {
   meal: ['id', 'name', 'amount', 'createdAt'],
   weight: ['id', 'weight', 'createdAt'],
   vetVisit: ['id', 'reason', 'vetName', 'visitDate', 'nextVisit'],
-  dairy: ['id', 'kind', 'recordedOn', 'liters'],
+  dairy: ['id', 'kind', 'recordedOn', 'liters', 'session'],
 }
 
 export function chatContext(animal, findings) {

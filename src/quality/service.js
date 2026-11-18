@@ -31,9 +31,14 @@ async function refresh(tx, petId) {
   const active = new Set()
 
   for (const finding of findings) {
-    const fingerprint = hash([finding.ruleId, finding.records])
+    // Session metadata changes evidence, while the same pair retains its identity.
+    const identity = finding.records.map(record => ({
+      ...record, fields: record.fields.filter(field => field !== 'session'),
+    }))
+    const fingerprint = hash([finding.ruleId, identity])
     const evidence = hash([finding.parameters, finding.records.map(({ type, id, fields }) =>
-      fields.map(field => recordsByType[type].get(id)[field]))])
+      fields.filter(field => field !== 'session' || recordsByType[type].get(id).session != null)
+        .map(field => recordsByType[type].get(id)[field]))])
     active.add(fingerprint)
     const old = previous.get(fingerprint)
     if (!old) {
