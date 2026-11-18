@@ -1,3 +1,4 @@
+import { changeAnimal } from '../quality/service.js'
 import express from 'express'
 import prisma from '../lib/prisma.js'
 
@@ -10,13 +11,13 @@ router.post('/weights', async (req, res) => {
   if (!weight) return res.status(400).json({ message: "Weight is required!" })
 
   try {
-    const newWeight = await prisma.weight.create({
+    const newWeight = await changeAnimal(req.pet.id, tx => tx.weight.create({
       data: {
         weight,
         notes,
         petId: req.pet.id
       }
-    })
+    }))
 
     res.status(201).json({ data: newWeight })
   } catch (error) {
@@ -68,13 +69,13 @@ router.patch('/weights/:weightId', async (req, res) => {
   const { weight, notes } = req.body
 
   try {
-    const updateWeight = await prisma.weight.update({
+    const updateWeight = await changeAnimal(req.pet.id, tx => tx.weight.update({
       where: {
         id: parseInt(req.params.weightId),
         petId: req.pet.id
       },
       data: { weight, notes }
-    })
+    }))
 
     res.json({ message: "Weight successfully updated!", data: updateWeight })
   } catch (error) {
@@ -89,12 +90,12 @@ router.patch('/weights/:weightId', async (req, res) => {
 // DELETE a weight for specific pet
 router.delete('/weights/:weightId', async (req, res) => {
   try {
-    await prisma.weight.delete({
+    await changeAnimal(req.pet.id, tx => tx.weight.delete({
       where: {
         id: parseInt(req.params.weightId),
         petId: req.pet.id
       }
-    })
+    }))
 
     res.json({ message: 'Weight successfully deleted!' })
   } catch (error) {

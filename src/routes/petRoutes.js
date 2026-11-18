@@ -1,3 +1,4 @@
+import { changeAnimal, createAnimal } from '../quality/service.js'
 import express from 'express'
 import prisma from '../lib/prisma.js'
 
@@ -10,7 +11,7 @@ router.post('/pets', async (req, res) => {
   if (!name || !species) return res.status(400).json({ message: "Name and species are required!" })
 
   try {
-    const pet = await prisma.pet.create({
+    const pet = await createAnimal(tx => tx.pet.create({
       data: {
         name,
         species,
@@ -21,7 +22,7 @@ router.post('/pets', async (req, res) => {
         notes,
         userId: req.user.userId
       }
-    })
+    }))
 
     res.status(201).json({ data: pet })
   } catch (error) {
@@ -74,12 +75,12 @@ router.patch('/pets/:id', async (req, res) => {
   const { name, species, gender, breed, age, weight, notes } = req.body
 
   try {
-    const updatePet = await prisma.pet.update({
+    const updatePet = await changeAnimal(parseInt(req.params.id, 10), tx => tx.pet.update({
       where: {
         id: parseInt(req.params.id),
         userId: req.user.userId
       }, data: { name, species, gender, breed, age, weight, notes }
-    })
+    }))
 
     res.json({ message: "Pet Successfully updated!", data: updatePet })
   } catch (error) {

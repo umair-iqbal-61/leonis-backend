@@ -1,3 +1,4 @@
+import { changeAnimal } from '../quality/service.js'
 import express from 'express'
 import prisma from '../lib/prisma.js'
 import { parseDate } from '../lib/parseDate.js'
@@ -21,7 +22,7 @@ router.post('/vetvisits', async (req, res) => {
   }
 
   try {
-    const newVetVisit = await prisma.vetVisit.create({
+    const newVetVisit = await changeAnimal(req.pet.id, tx => tx.vetVisit.create({
       data: {
         reason,
         vetName,
@@ -30,7 +31,7 @@ router.post('/vetvisits', async (req, res) => {
         notes,
         petId: req.pet.id
       }
-    })
+    }))
 
     res.status(201).json({ data: newVetVisit })
   } catch (error) {
@@ -92,7 +93,7 @@ router.patch('/vetvisits/:vetVisitId', async (req, res) => {
   }
 
   try {
-    const updateVetVisit = await prisma.vetVisit.update({
+    const updateVetVisit = await changeAnimal(req.pet.id, tx => tx.vetVisit.update({
       where: {
         id: parseInt(req.params.vetVisitId),
         petId: req.pet.id
@@ -104,7 +105,7 @@ router.patch('/vetvisits/:vetVisitId', async (req, res) => {
         nextVisit: parsedNextVisit,
         notes,
       }
-    })
+    }))
 
     res.json({ message: "Vet visit successfully updated!", data: updateVetVisit })
   } catch (error) {
@@ -119,12 +120,12 @@ router.patch('/vetvisits/:vetVisitId', async (req, res) => {
 // DELETE a vetvisit for specific pet
 router.delete('/vetvisits/:vetVisitId', async (req, res) => {
   try {
-    await prisma.vetVisit.delete({
+    await changeAnimal(req.pet.id, tx => tx.vetVisit.delete({
       where: {
         id: parseInt(req.params.vetVisitId),
         petId: req.pet.id
       }
-    })
+    }))
 
     res.json({ message: 'Vet visit successfully deleted!' })
   } catch (error) {

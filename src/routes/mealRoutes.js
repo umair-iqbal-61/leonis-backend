@@ -1,3 +1,4 @@
+import { changeAnimal } from '../quality/service.js'
 import express from 'express'
 import prisma from '../lib/prisma.js'
 
@@ -10,14 +11,14 @@ router.post('/meals', async (req, res) => {
   if (!name) return res.status(400).json({ message: "Name is required!" })
 
   try {
-    const meal = await prisma.meal.create({
+    const meal = await changeAnimal(req.pet.id, tx => tx.meal.create({
       data: {
         name,
         amount,
         notes,
         petId: req.pet.id
       }
-    })
+    }))
 
     res.status(201).json({ data: meal })
   } catch (error) {
@@ -69,13 +70,13 @@ router.patch('/meals/:mealId', async (req, res) => {
   const { name, amount, notes } = req.body
 
   try {
-    const updateMeal = await prisma.meal.update({
+    const updateMeal = await changeAnimal(req.pet.id, tx => tx.meal.update({
       where: {
         id: parseInt(req.params.mealId),
         petId: req.pet.id
       },
       data: { name, amount, notes }
-    })
+    }))
 
     res.json({ message: "Meal successfully updated!", data: updateMeal })
   } catch (error) {
@@ -90,12 +91,12 @@ router.patch('/meals/:mealId', async (req, res) => {
 // DELETE a meal for specific pet
 router.delete('/meals/:mealId', async (req, res) => {
   try {
-    await prisma.meal.delete({
+    await changeAnimal(req.pet.id, tx => tx.meal.delete({
       where: {
         id: parseInt(req.params.mealId),
         petId: req.pet.id
       }
-    })
+    }))
 
     res.json({ message: 'Meal successfully deleted!' })
   } catch (error) {

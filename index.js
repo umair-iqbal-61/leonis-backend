@@ -12,6 +12,8 @@ import reminderRoutes from './src/routes/reminderRoutes.js'
 import userAllRemindersRoute from './src/routes/userAllRemindersRoute.js'
 import photoRoutes from './src/routes/photoRoutes.js'
 import avatarRoutes from './src/routes/avatarRoutes.js'
+import qualityRoutes from './src/routes/qualityRoutes.js'
+import dairyRoutes from './src/routes/dairyRoutes.js'
 import chatRoutes from './src/routes/chatRoutes.js'
 
 const app = express()
@@ -36,8 +38,15 @@ app.use('/api/pets/:petId', validateToken, verifyPetOwnership, photoRoutes)
 app.use('/api/pets/:petId', validateToken, verifyPetOwnership, avatarRoutes)
 
 app.use('/api/pets/:petId', validateToken, verifyPetOwnership, chatRoutes)
+app.use('/api/pets/:petId', validateToken, verifyPetOwnership, dairyRoutes, qualityRoutes)
 
 app.use('/api', validateToken, userAllRemindersRoute)
+
+app.use((error, req, res, next) => {
+  if (res.headersSent) return next(error)
+  console.error(error)
+  res.status(500).json({ message: 'Something went wrong!' })
+})
 
 app.listen(PORT, () => {
   console.log(`Server is listening on PORT ${PORT}`)

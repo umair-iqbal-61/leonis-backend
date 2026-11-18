@@ -37,6 +37,8 @@ model Pet {
   vetVisits VetVisit[]
   reminders Reminder[]
   photos    Photo[]
+  dairyRecords DairyRecord[]
+  qualityFindings QualityFinding[]
   userId    Int
   user      User       @relation(fields: [userId], references: [id])
 }
@@ -97,4 +99,47 @@ model Photo {
   createdAt  DateTime @default(now())
   petId      Int
   pet        Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+}
+
+enum DairyRecordKind {
+  MILK_YIELD
+  BREEDING
+  CALVING
+}
+
+enum QualityStatus {
+  OPEN
+  REVIEWED
+  RESOLVED
+  DISMISSED
+}
+
+model DairyRecord {
+  id            Int             @id @default(autoincrement())
+  petId         Int
+  pet           Pet             @relation(fields: [petId], references: [id], onDelete: Cascade)
+  kind          DairyRecordKind
+  recordedOn    DateTime        @db.Date
+  liters        Decimal?
+  notes         String?
+  @@index([petId, recordedOn])
+}
+
+model QualityFinding {
+  id             Int           @id @default(autoincrement())
+  petId          Int
+  pet            Pet           @relation(fields: [petId], references: [id], onDelete: Cascade)
+  fingerprint    String
+  evidence       String
+  ruleId         String
+  dimension      String
+  severity       String
+  records        Json
+  explanationKey String
+  parameters     Json
+  status         QualityStatus @default(OPEN)
+  active         Boolean       @default(true)
+  reviewedAt     DateTime?
+  @@unique([petId, fingerprint])
+  @@index([petId, active])
 }
