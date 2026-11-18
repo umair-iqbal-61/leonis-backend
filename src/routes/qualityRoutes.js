@@ -1,7 +1,13 @@
 import { Router } from 'express'
 import { qualityReport, qualitySnapshot, withAnimalLock } from '../quality/service.js'
 
+import { speciesGuide } from '../quality/speciesGuide.js'
+
 const router = Router()
+
+router.get('/guide', (req, res) => {
+  res.json({ data: speciesGuide(req.pet) })
+})
 
 async function report(req, res) {
   const { animal, findings } = await qualitySnapshot(req.pet.id)

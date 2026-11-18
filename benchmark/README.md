@@ -105,3 +105,8 @@ npx prisma migrate deploy
 
 Run duplicate boundary and backward-compatibility checks with
 `node --test --test-reporter=tap test/duplicateDetection.test.js`.
+
+The species record-completeness checks are evaluated separately from these
+historical fixtures. Production combines both rule sets. See
+[species record expectations](../docs/species-record-expectations.md) for their
+sources, trigger conditions and test coverage.

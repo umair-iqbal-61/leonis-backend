@@ -91,3 +91,42 @@ test('owner can review and resolve automatically refreshed findings', { skip: !a
     await request(base, { token, method: 'DELETE' })
   }
 })
+
+test('species findings clear after record entry and remain owner-scoped', { skip: !api }, async () => {
+  async function request(path, token, method = 'GET', body, status = 200) {
+    const response = await fetch(api + path, {
+      method, headers: { 'Content-Type': 'application/json', ...(token && { Authorization: 'Bearer ' + token }) },
+      body: JSON.stringify(body),
+    })
+    const payload = await response.json()
+    assert.equal(response.status, status, JSON.stringify(payload))
+    return payload.data ?? payload
+  }
+  const { token } = await request('/auth/register', null, 'POST', {
+    username: 'species-' + crypto.randomUUID(), password: crypto.randomUUID(),
+  })
+  const other = await request('/auth/register', null, 'POST', {
+    username: 'species-other-' + crypto.randomUUID(), password: crypto.randomUUID(),
+  })
+  const pet = await request('/pets', token, 'POST', { name: 'Species test', species: 'cat' }, 201)
+  const base = '/pets/' + pet.id
+  try {
+    const guide = await request(base + '/guide', token)
+    assert.equal(guide[0].id, 'companion-records')
+    assert.ok(guide[0].text.ur)
+    await request(base + '/guide', other.token, 'GET', undefined, 404)
+    await request(base + '/vetvisits', token, 'POST', { reason: 'Check', visitDate: '2026-10-01' }, 201)
+    const report = await request(base + '/quality', token)
+    const finding = report.findings.find(item => item.ruleId === 'weightHistoryMissing')
+    assert.ok(finding.active)
+    assert.ok(finding.source.url.startsWith('https://www.aaha.org/'))
+    await request(base + '/quality/findings/' + finding.id, token, 'PATCH', { status: 'DISMISSED' })
+    const repeated = await request(base + '/quality/check', token, 'POST')
+    assert.equal(repeated.findings.find(item => item.id === finding.id).status, 'DISMISSED')
+    await request(base + '/weights', token, 'POST', { weight: 4 }, 201)
+    const corrected = await request(base + '/quality', token)
+    assert.equal(corrected.findings.find(item => item.id === finding.id).active, false)
+  } finally {
+    await request(base, token, 'DELETE')
+  }
+})

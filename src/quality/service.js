@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto'
 import prisma from '../lib/prisma.js'
-import { assess } from './rules.js'
+import { assessRecordQuality, expectationSources } from './speciesGuide.js'
 
 const hash = value => createHash('sha256').update(JSON.stringify(value)).digest('hex')
 
@@ -24,7 +24,7 @@ async function refresh(tx, petId) {
     meals: await tx.meal.findMany({ where }),
     dairyRecords: await tx.dairyRecord.findMany({ where }),
   }
-  const findings = assess(animal, { asOf: new Date() })
+  const findings = assessRecordQuality(animal, { asOf: new Date() })
   const existing = await tx.qualityFinding.findMany({ where: { petId } })
   const previous = new Map(existing.map(item => [item.fingerprint, item]))
   const recordsByType = indexRecords(animal)
@@ -112,6 +112,7 @@ export function qualityReport(animal, findings) {
     counts,
     findings: findings.map(item => ({
       ...item,
+      source: expectationSources[item.ruleId] ?? null,
       records: item.records.map(record => {
         const source = sources[record.type].get(record.id)
         return {
