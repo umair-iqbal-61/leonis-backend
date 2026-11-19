@@ -2,6 +2,7 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import prisma from '../lib/prisma.js'
+import { signupWorkspace } from '../account/workspaces.js'
 
 const router = express.Router()
 
@@ -12,13 +13,16 @@ router.post('/register', async (req, res) => {
     return res.status(400).json({ message: "Username and password are required!" })
   }
 
+  const preferences = signupWorkspace(req.body.workspace)
+  if (!preferences) return res.status(400).json({ message: 'INVALID_WORKSPACE' })
   const hashedPassword = await bcrypt.hash(password, 10)
 
   try {
     const user = await prisma.user.create({
       data: {
         username,
-        password: hashedPassword
+        password: hashedPassword,
+        ...preferences
       }
     })
 

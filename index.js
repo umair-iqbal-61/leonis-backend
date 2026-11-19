@@ -17,6 +17,8 @@ import dairyRoutes from './src/routes/dairyRoutes.js'
 import chatRoutes from './src/routes/chatRoutes.js'
 import listingRoutes from './src/routes/listingRoutes.js'
 import storeRoutes from './src/routes/storeRoutes.js'
+import barnRoutes from './src/routes/barnRoutes.js'
+import accountRoutes from './src/routes/accountRoutes.js'
 
 const app = express()
 const PORT = process.env.PORT || 7461
@@ -30,6 +32,8 @@ app.use(express.json())
 app.use('/api/auth', authRoutes)
 app.use('/api/listings', listingRoutes)
 app.use('/api/store', storeRoutes)
+app.use('/api/barns', barnRoutes)
+app.use('/api/account', accountRoutes)
 
 app.use('/api', validateToken, petRoutes)
 

@@ -176,3 +176,11 @@ node --test test/store.test.js test/listings.test.js test/recordQuality.test.js
 ```
 
 `test/store.integration.test.js` is opt-in, using the same disposable localhost `leonis_smoke` database and backend on port 7462 as the marketplace integration test. Set `LEONIS_TEST_DATABASE_URL` and `LEONIS_TEST_API_URL=http://localhost:7462/api` explicitly. It checks role denial/revocation, private-order ownership, server-side pricing, quote revision and acceptance, status transitions, cancellation stock restoration, and concurrent/idempotent reservations. It temporarily sets test delivery rates and restores the prior settings; run it only on the disposable database. Cloudinary uploads are separately smoke-tested with external storage simulated.
+
+## Barn dashboard
+
+Open `/barns` for owner-scoped cattle assignment/history, milk and animal-sale income, costs, dated payments and reports. The report distinguishes recorded operating margins from cash movement and does not claim complete net profit. Shared costs remain separate; no study prices are prefilled. Apply the additive `20261119010000_barns` migration before use. See [setup, API and report definitions](docs/barn-dashboard.md) and [research references](REFERENCES.md).
+
+## Account workspaces
+
+Signup offers Pets, Livestock, or both under one login. The header dropdown switches enabled workspaces and opens Manage workspaces; Marketplace/Store stay shared. Existing users are backfilled from their owned pet/cattle/barn records without changing animal IDs. Disabling a workspace hides navigation rather than deleting records. Apply `20261119020000_workspaces` before using the updated frontend. See [workspace behavior, migration and API](docs/workspaces.md).

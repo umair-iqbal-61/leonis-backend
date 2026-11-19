@@ -1,5 +1,10 @@
 # Barn dashboard interviews
 
+Update, 19 November 2026: the owner approved a research-led provisional dashboard
+because interviews are unavailable. The questions below remain optional later
+validation; they no longer block provisional implementation. See
+[Pakistan research and proposed scope](barn-dashboard-research.md).
+
 Use these prompts in three 15-minute conversations with dairy owners or
 livestock dealers. Note whether the participant raises cattle, trades cattle,
 or does both. Record examples with identifying details removed.
@@ -17,5 +22,6 @@ or does both. Record examples with identifying details removed.
 
 Summarize each participant’s current process, required fields, shared-cost
 handling, treatment of incomplete records, and preferred reporting period.
-Use those answers to settle the PKR inputs and the per-animal and per-barn
-profit calculations before implementing the dashboard.
+Use those answers later to validate the provisional PKR inputs and improve the
+per-animal and per-barn reporting definitions. Published research must not be
+presented as completed owner interviews.

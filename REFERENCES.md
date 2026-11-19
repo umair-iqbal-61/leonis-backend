@@ -1,0 +1,67 @@
+# Leonis research references
+
+Keep important research here by **topic**, not as a list of unexplained links.
+For each new investigation record: research date, issue/question, source title and
+URL, what it informed, affected files, and limitations or unresolved questions.
+Prefer original publishers, official documentation and primary research. Separate
+source evidence from Leonis design choices; never invent an access date or claim
+an unverified source was checked. Do not store secrets or identifying interview data.
+
+Frontend assets/design references are in [the frontend register](../leonis-frontend/REFERENCES.md).
+
+## Barn dashboard — Pakistan dairy records and finances
+
+**Researched:** 19 November 2026.
+**Question:** Which records should the provisional Pakistan-focused barn dashboard support when owner interviews are unavailable?
+
+| Source | Use in Leonis | Limits |
+| --- | --- | --- |
+| [SMEDA: Dairy Farm, 25 Cows — May 2025](https://smeda.org/phocadownload/Prefeasibility_Studies/Dairy/Dairy%20Farm%2025%20Cows%20Rs.%2050.83%20million%20May-2025.pdf) | Record categories: milk/animal income, feed, health, labour, utilities and maintenance. Printed pp. 10, 19–22. | Feasibility assumptions, not current prices or owner interviews. No rates, yields or projected returns become application defaults. |
+| [SMEDA: Dairy Farm, 100 Cows — May 2025](https://smeda.org/phocadownload/Prefeasibility_Studies/Dairy/Dairy%20Farm%20100%20Cows%20Rs.%20160.56%20million%20May-2025.pdf) | Background comparison with another farm scale. | Consulted as context; its scale and financial assumptions are not the specification for every barn. |
+| [Dairy Hub / Tetra Pak Pakistan: Mechanized Dairy Farming, hosted by UVAS](https://uvas.edu.pk/doc/advisory_services/Dairy-farming/english/14-Mechanized_Dairy_Farming.pdf) | Animal identification, individual production and income/expense record keeping; printed pp. 10–11, PDF p. 7. | Background guidance; publication date not established in this investigation. Hosting at UVAS does not make it a UVAS-authored publication. |
+| [FAO: Small-Scale Dairy Farming Manual — Dairy Farm Accounting](https://www.fao.org/4/t1265e/t1290e01.htm) | Payments/receipts, milk-sale quantities and capital versus recurrent items; pp. 5–8. | General guidance, not Pakistan-specific market rates. Cash movement must not be presented as confirmed net profit. |
+
+**Design decisions:** multiple barns; both milk and animal sales; actual owner-entered PKR amounts; shared costs remain identifiable; no automatic overhead allocation. These are provisional product decisions, not source quotations or completed interview findings.
+
+**Related work:** [research/specification](docs/barn-dashboard-research.md), [future interview prompts](docs/barn-dashboard-interviews.md), [v2 status](docs/v2-status.md).
+**Implementation update, 19 November 2026:** provisional dashboard implemented. See [behavior/API](docs/barn-dashboard.md), [financial/date validation](src/barn/records.js), [report calculations](src/barn/report.js), [transactions and assignment logic](src/barn/service.js), [unit assertions](test/barn.test.js), and [isolated integration checks](test/barn.integration.test.js). Exclusive transfer-date boundaries, dated settlements, optimistic edit versions and no automatic shared-cost allocation are explicit Leonis engineering choices; they are not standards quoted from these sources. Owner workflow review is pending.
+
+## Record quality and cited species/breed guidance
+
+**Registered:** 19 November 2026, imported from existing code and research notes.
+**Sources checked:** 18 November 2026, according to `docs/species-record-expectations.md`. These links were not fetched again for this register update.
+**Question:** What published guidance supports the curated species entries and record-completeness prompts?
+
+| Source | Existing use | Limits |
+| --- | --- | --- |
+| [AAHA: Nutrition and Weight Management Guidelines — Screening Evaluation](https://www.aaha.org/resources/2021-aaha-nutrition-and-weight-management-guidelines/screening-evaluation/) | Weight and dietary-history context for companion-animal records. | Existing notes report indexed official text with direct retrieval returning 403. The Leonis missing-weight trigger is a product rule, not a clinical threshold prescribed by this source. |
+| [Jamaica Dairy Development Board: Record Keeping](https://www.jddb.gov.jm/page/record-keeping) | Identification, production, breeding and calving record context. | Not Pakistan-specific; a missing-history finding is an owner-review prompt, not proof of a health problem. |
+| [Cat Fanciers’ Association: Maine Coon](https://cfa.org/breed/maine-coon-cat/) | Source for the curated Maine Coon coat-care entry. | Breed background only; not personalized veterinary advice. |
+| [Holstein Association USA: Holstein 101](https://www.holsteinusa.com/holstein_breed/holstein101.html) | Source for the curated Holstein breed entry. | Breed context does not validate an individual animal's yield or predict its performance. |
+
+**Related work:** [source/rule mapping](docs/species-record-expectations.md), [implementation](src/quality/speciesGuide.js), [tests](test/speciesGuide.test.js).
+
+## Evaluation and engineering assumptions
+
+**Registered:** 19 November 2026, from current repository evidence.
+
+- [Benchmark methods, results and limits](benchmark/README.md) documents the synthetic fixtures, comparison methods, rule improvements and remaining false positive. It is internal evidence, not an independent external accuracy study.
+- [Rule implementation](src/quality/rules.js) and [duplicate tests](test/duplicateDetection.test.js) define timing and fuzzy-match behavior. Thresholds/windows are implementation choices pending external validation; do not attribute them to the clinical or farming sources above.
+- [Record-quality tests](test/recordQuality.test.js), [metric tests](test/evaluationMetrics.test.js) and [integration checks](test/recordQuality.integration.test.js) document reproducible behavior. Passing tests does not establish clinical validity or real-world accuracy.
+
+## New entry template
+
+- **Date researched:** YYYY-MM-DD, or explicitly unknown.
+- **Issue / question:** What problem was being investigated?
+- **Source:** Original publisher, title, direct URL and relevant section/page.
+- **Used for:** Which decision or finding did it support?
+- **Affected work:** Code, specification, tests or documentation links.
+- **Limits / follow-up:** Age, access restrictions, assumptions and open questions.
+
+## Pets / Livestock workspace separation
+
+**Registered:** 20 November 2026. **Source:** the owner's conversation decision, not external research.
+**Issue:** pet-only users should not have barn/livestock controls in their normal workflow.
+**Decision:** one account with Pets/Livestock preferences, signup choice and later switching; commerce remains shared. Preference changes retain all records and do not confer admin privileges.
+**Affected work:** [behavior/API](docs/workspaces.md), [input validation](src/account/workspaces.js), [account routes](src/routes/accountRoutes.js), [migration](prisma/migrations/20261119020000_workspaces/migration.sql), [tests](test/workspaces.integration.test.js).
+**Evidence/limits:** isolated legacy-fixture backfill and API checks validate behavior, not a new account-authorization model. Owner-scoped APIs remain the security boundary; workspaces are interface organization.

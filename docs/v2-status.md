@@ -1,4 +1,4 @@
-# Leonis v2 checkpoint — 19 November 2026
+# Leonis v2 checkpoint — 20 November 2026
 
 ## Implemented
 
@@ -8,6 +8,8 @@
 - Initial cited species/breed guidance and server-scoped AI context filtering. Guidance is a small curated collection, not a comprehensive breed knowledge base.
 - Animal listings with drafts, deliberate public publishing, private-record separation, and phone/WhatsApp contact.
 - Single-seller catalogue, cart, COD requests, delivery quotes requiring buyer acceptance, inventory reservation and admin controls.
+- Provisional multi-barn dashboard: cattle assignment/transfer history, milk/animal sales, direct/shared costs, partial payments, and dated English/Urdu reports. Recorded operating margins and cash movement are distinguished from net profit. Agent verification and subsequent owner barn-workflow review passed.
+- Workspace update, 20 November 2026: one login with Pets/Livestock/both signup choices, saved workspace preferences, a switcher and separated profile navigation. Existing accounts are backfilled without changing records; commerce remains shared. Agent checks and owner workflow review passed.
 
 The owner confirmed marketplace operation, store administration, standard and heavy-order workflows, cancellation stock returns, and order tracking in a phone browser. Earlier browser checks used real isolated PostgreSQL/API operations, with external Cloudinary storage simulated. Live AI and uploads were separately checked by the owner.
 
@@ -26,14 +28,14 @@ The remaining challenge-set false positive concerns legitimate equal milk yields
 
 ## Deferred decisions and work
 
-- Barn financial dashboard: remains deferred until three owner/dealer interviews can inform fields. Prompts are in `docs/barn-dashboard-interviews.md`; PKR purchase/feed/vet/transport/sale fields are not finalized.
+- Barn financial dashboard: research-led provisional implementation and workspace navigation passed owner review. See `docs/barn-dashboard.md` and `docs/barn-dashboard-research.md`. Interviews remain later validation.
 - External labeling and fresh evaluation data remain needed to strengthen the evidence for record quality.
 - Broader cited guidance can expand the initial knowledge collection after source review.
 - Multiple store sellers, payouts, commissions, mixed-seller checkout and online payments remain later work by owner choice.
 
-## Release preparation next
+## Release preparation after the barn milestone
 
-1. Choose/confirm the staging frontend, backend and development-database targets before publishing or applying migrations outside isolated tests.
+1. Complete and verify the provisional barn milestone, then confirm the existing v1 frontend, backend and database targets before publishing or applying migrations outside isolated tests. The owner chose to retain v1 hosting.
 2. Configure the actual frontend API base including `/api`, backend CORS origin, service credentials and store-admin role without committing secrets.
 3. Keep checkout closed until actual nationwide delivery rates and parcel limits are configured; do not reuse test rates.
 4. Run migrated-database and browser smoke tests on staging, including buyer/admin separation and live uploads/AI.

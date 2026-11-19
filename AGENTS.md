@@ -20,6 +20,8 @@ There is no lint script. Run the rule tests and benchmark without a database.
 node --test --test-reporter=tap test/recordQuality.test.js
 node --test test/listings.test.js
 node --test test/store.test.js
+node --test test/barn.test.js
+node --test test/workspaces.test.js
 node benchmark/evaluate.js
 ```
 
@@ -27,7 +29,7 @@ Run the syntax check for handwritten JavaScript, then the smoke test with the se
 
 ```bash
 node --check index.js
-find src/routes src/middleware src/lib src/quality src/store scripts -name '*.js' -exec sh -c '
+find src/routes src/middleware src/lib src/quality src/store src/barn src/account scripts -name '*.js' -exec sh -c '
   for file do node --check "$file" || exit 1; done
 ' sh {} +
 ```
@@ -55,6 +57,7 @@ find src/routes src/middleware src/lib src/quality src/store scripts -name '*.js
 
 ## Guardrails
 
+- Keep `REFERENCES.md` updated when researching Leonis issues: record the date, topic, primary source links, use, affected files and limitations. Separate evidence from project assumptions.
 - Work on a dedicated branch. Ask before modifying `main`.
 - Never read, create, or edit `.env` files or expose secrets.
 - `npm ci` installs existing locked dependencies. Ask before adding or upgrading dependencies.
