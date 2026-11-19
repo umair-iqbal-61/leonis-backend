@@ -1,7 +1,8 @@
 # Deploy Leonis v2 on the existing hosting
 
-Prepared 20 November 2026. Local preparation only; production settings, database
-migration history and hosting-plan capabilities have not been inspected.
+Prepared 20 November 2026. The owner confirmed Render Free. Production service
+settings and database migration history have not been inspected. The available
+browser currently requires Render sign-in.
 
 ## Targets and release order
 
@@ -67,6 +68,23 @@ CI/release job with the same checked-in migrations and securely supplied target
 configuration before starting the new API. Do not assume a paid shell/pre-deploy
 feature exists, and do not silently add database changes to the build command.
 The chosen production migration method remains a release decision.
+
+### Confirmed free-plan path
+
+The owner confirmed **Free** on 20 November 2026. No paid pre-deploy command or
+Render shell is available on that service. Keep the build/start commands above;
+run migrations separately in the approved release context before publishing v2.
+
+Next, inspect the existing service's repository, deployed commit, branch,
+auto-deploy mode, Node override, build and start commands. Do not change the
+linked branch or trigger a deployment while gathering these details. Then
+privately confirm the Neon target, restore point and migration history before
+choosing and configuring the release runner.
+
+A GitHub Actions manual-dispatch workflow must exist on the repository's default
+branch to be triggered. Adding it only to `version-two` does not establish a
+working release job. No workflow, default-branch change or change to `main` has
+been made. The runner must be settled before attempting the production migration.
 
 `GET /health` returns `200 {"status":"ok"}` without authentication or database
 queries. It checks process liveness only; database, AI and storage readiness

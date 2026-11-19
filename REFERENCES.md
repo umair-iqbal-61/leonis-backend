@@ -82,3 +82,11 @@ Frontend assets/design references are in [the frontend register](../leonis-front
 Prisma build script, README/AGENTS commands, and [liveness route](index.js).
 Local preparation does not establish that live database history matches the repo.
 No production settings, secrets, migrations or deployments were changed.
+
+### Free-plan release follow-up
+
+**Checked:** 20 November 2026; the owner confirmed the current Render service is Free.
+
+- [Render: free web-service limitations](https://render.com/docs/free) confirms no shell access; [deploy steps](https://render.com/docs/deploys#pre-deploy-command) limits pre-deploy commands to paid services. This constrains the release runner; no paid upgrade was requested or configured.
+- [GitHub: manually running a workflow](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow) requires a manual-dispatch workflow on the default branch. A workflow committed only to `version-two` would not by itself provide the proposed manual release job. No default-branch or `main` change was made.
+- **Affected work:** [confirmed free-plan path](docs/deploy-v2.md#confirmed-free-plan-path). The Render dashboard opened at sign-in; live service settings and Neon migration history remain unverified. No database credentials were accessed.
