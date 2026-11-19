@@ -1,8 +1,9 @@
 # Deploy Leonis v2 on the existing hosting
 
-Prepared 20 November 2026. The owner confirmed Render Free. Production service
-settings and database migration history have not been inspected. The available
-browser currently requires Render sign-in.
+Prepared 20 November 2026. The owner confirmed Render Free, and the Render
+service settings have now been inspected read-only. Neon database identity,
+migration history and recovery options remain unverified; its console requires
+separate owner sign-in.
 
 ## Targets and release order
 
@@ -34,6 +35,31 @@ state of the live Neon database. Repository guardrails currently authorize agent
 migration tests only on dedicated development databases.
 
 ## Render backend settings
+
+### Existing service verified 20 November 2026
+
+Source: the authenticated [service settings](https://dashboard.render.com/web/srv-da5ib3rtqb8s73ainuag/settings), environment variable **names only**, and latest successful deployment.
+
+| Setting | Observed current value |
+| --- | --- |
+| Service | `pawpal-backend`, Free, Singapore |
+| Source repository | `umair-iqbal-61/leonis-backend` |
+| Branch / auto-deploy | `main` / On Commit |
+| Live commit | `03d7b345f8b49357403c6de052d4a076e253a818` |
+| Successful deployment | `dep-dbe8khbbc2fs73fviee0`, 24 October 2026 |
+| Root directory | Unset (repository root) |
+| Build command | `npm install && npx prisma generate` |
+| Start command | `npm start` |
+| Pre-deploy / HTTP health-check path | Unavailable on Free / unset |
+| Explicit `NODE_VERSION` setting | Absent |
+
+All six expected server variable names are configured; values remained masked.
+There are no linked environment groups. The deployed source commit has no Node
+engine declaration, `.node-version` or `.nvmrc`. Old deployment logs are outside
+retention, so the actual running Node version is **not verified**. No setting
+was changed, deployment triggered or database accessed during this inspection.
+
+### Proposed v2 settings
 
 | Setting | Value |
 | --- | --- |
@@ -75,11 +101,25 @@ The owner confirmed **Free** on 20 November 2026. No paid pre-deploy command or
 Render shell is available on that service. Keep the build/start commands above;
 run migrations separately in the approved release context before publishing v2.
 
-Next, inspect the existing service's repository, deployed commit, branch,
-auto-deploy mode, Node override, build and start commands. Do not change the
-linked branch or trigger a deployment while gathering these details. Then
-privately confirm the Neon target, restore point and migration history before
-choosing and configuring the release runner.
+The existing service is linked to `main` with On Commit auto-deploy. During the
+approved release, disable auto-deploy before changing its linked branch or
+commands, then deploy the reviewed v2 commit manually after migration checks.
+Do not push to `main` to release this work. First privately confirm the Neon
+target, restore point and migration history before choosing/configuring the
+release runner. No hosting setting has been changed yet.
+
+Use [v2-database-preflight.sql](v2-database-preflight.sql) in the confirmed Neon
+database's SQL Editor to inspect table names, migration names/checksums/status
+and aggregate v1 record counts inside a read-only transaction. It does not read
+individual account/animal records or change data. It has not yet been run
+against Neon. If the history table is absent or any migration is unfinished,
+stop and investigate. Compare recorded checksums to the checked-in SQL before
+any production migration.
+
+For rehearsal, a dedicated Neon child branch can isolate migration writes from
+its parent. Confirm the actual project's plan/branch limits and selected parent
+before creating one. Branching is not evidence that a restorable release backup
+exists; separately confirm a recovery option and its usable retention window.
 
 A GitHub Actions manual-dispatch workflow must exist on the repository's default
 branch to be triggered. Adding it only to `version-two` does not establish a

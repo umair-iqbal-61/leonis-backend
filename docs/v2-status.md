@@ -38,9 +38,11 @@ The remaining challenge-set false positive concerns legitimate equal milk yields
 The local runtime/build configuration and a concrete release sequence are now
 documented in [deploy-v2.md](deploy-v2.md). No production deployment or migration
 has been performed. The owner confirmed Render Free on 20 November 2026; use a
-separate migration release step. Existing service settings and database
-history/restore point still need confirmation before publication. Dashboard
-inspection is waiting for owner sign-in in the available browser.
+separate migration release step. Read-only Render inspection verified the live
+`main` deployment, build/start commands, On Commit auto-deploy and configured
+variable names; the actual running Node version is unverified because old logs
+expired. Neon target/history/restore options still need inspection; its console
+requires owner sign-in. No production setting or database has been changed.
 
 1. Complete and verify the provisional barn milestone, then confirm the existing v1 frontend, backend and database targets before publishing or applying migrations outside isolated tests. The owner chose to retain v1 hosting.
 2. Configure the actual frontend API base including `/api`, backend CORS origin, service credentials and store-admin role without committing secrets.
