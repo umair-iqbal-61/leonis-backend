@@ -100,3 +100,13 @@ No production settings, secrets, migrations or deployments were changed.
 - [Neon: branching](https://neon.com/docs/concepts/branch-your-backend) supports a dedicated child branch for rehearsing database changes without writing to the parent. The actual project, parent branch, plan limits and current schema remain unverified.
 - [Neon: backup strategies](https://neon.com/docs/postgres/backup-restore/backups) distinguishes history-based instant recovery from `pg_dump`/`pg_restore` backups. Project-specific recovery settings must be inspected; no backup or restore rehearsal has been performed.
 - **Affected work:** [read-only preflight SQL](docs/v2-database-preflight.sql) and release/status documentation. The SQL reads metadata and aggregate counts only, within `BEGIN READ ONLY`; it has not been executed against Neon. The Neon console requires owner sign-in. No secret values or individual records were accessed during this inspection.
+
+### Neon migration and recovery audit
+
+**Checked:** 20 November 2026, after owner sign-in. This supersedes the earlier Neon access limitation.
+
+- **Direct evidence:** authenticated Leonis project/branch overviews, production Backup & Restore, and SQL Editor metadata/count results. [Database audit](docs/v2-database-audit.md) records the exact branch/compute IDs, counts, ten migration checksums and limits. Both SQL transactions reported read-only mode. No schema/application-data writes or new backups/branches were performed.
+- **Verification:** production's four existing migration checksums and development's six additional checksums match local SHA-256 hashes of the checked-in SQL. History is consistent; this is not a full schema-drift or restore verification. Render's database URL remained masked, so its actual target still needs private confirmation.
+- [Neon: backup strategies](https://neon.com/docs/postgres/backup-restore/backups) supports choosing a recovery method and validating it separately from migration history. Production currently shows six hours of history and no snapshots.
+- [Neon: current plan limits and snapshots](https://neon.com/docs/introduction/plans#snapshots) lists one manual snapshot on Free and documents storage pricing. Backup choice is pending; no billable upgrade or snapshot has been requested automatically.
+- [Neon engineering: passwordless psql](https://neon.com/blog/how-psql-pg-neon-tech-works) describes browser selection of a project/endpoint for a temporary CLI connection without copying database credentials. Published 14 August 2024; a potential tooling route only. It has not been tested for this project's export, and it is not evidence that `pg_dump` has succeeded.

@@ -1,9 +1,10 @@
 # Deploy Leonis v2 on the existing hosting
 
 Prepared 20 November 2026. The owner confirmed Render Free, and the Render
-service settings have now been inspected read-only. Neon database identity,
-migration history and recovery options remain unverified; its console requires
-separate owner sign-in.
+service settings and both Neon branches have now been inspected read-only.
+See [the database audit](v2-database-audit.md): production has six pending v2
+migrations; development has all ten applied. Render's actual database target,
+a verified release backup and fresh-copy rehearsal remain outstanding.
 
 ## Targets and release order
 
@@ -111,10 +112,11 @@ release runner. No hosting setting has been changed yet.
 Use [v2-database-preflight.sql](v2-database-preflight.sql) in the confirmed Neon
 database's SQL Editor to inspect table names, migration names/checksums/status
 and aggregate v1 record counts inside a read-only transaction. It does not read
-individual account/animal records or change data. It has not yet been run
-against Neon. If the history table is absent or any migration is unfinished,
-stop and investigate. Compare recorded checksums to the checked-in SQL before
-any production migration.
+individual account/animal records or change data. It ran successfully against
+the named production branch on 20 November 2026; a shorter equivalent checked
+development. All ten migration checksums match the repository; only four are
+applied on production. If later checks find missing/unfinished history, stop and
+investigate. Refresh the baseline before any production migration.
 
 For rehearsal, a dedicated Neon child branch can isolate migration writes from
 its parent. Confirm the actual project's plan/branch limits and selected parent
