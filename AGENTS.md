@@ -18,6 +18,8 @@ There is no lint script. Run the rule tests and benchmark without a database.
 
 ```bash
 node --test --test-reporter=tap test/recordQuality.test.js
+node --test test/listings.test.js
+node --test test/store.test.js
 node benchmark/evaluate.js
 ```
 
@@ -25,7 +27,7 @@ Run the syntax check for handwritten JavaScript, then the smoke test with the se
 
 ```bash
 node --check index.js
-find src/routes src/middleware src/lib src/quality -name '*.js' -exec sh -c '
+find src/routes src/middleware src/lib src/quality src/store scripts -name '*.js' -exec sh -c '
   for file do node --check "$file" || exit 1; done
 ' sh {} +
 ```

@@ -7,10 +7,12 @@ const fieldsByType = {
 }
 
 export function chatContext(animal, findings) {
+  const hasDairyRecords = animal.species === 'dairy-cattle'
   const excluded = new Map()
   for (const { active, status, records } of findings) {
     if (!active || status === 'DISMISSED' || status === 'RESOLVED') continue
     for (const { type, id, fields } of records) {
+      if (type === 'dairy' && !hasDairyRecords) continue
       const key = `${type}:${id}`
       excluded.set(key, new Set([...(excluded.get(key) ?? []), ...fields]))
     }
@@ -27,7 +29,7 @@ export function chatContext(animal, findings) {
     meals: recent('meal', animal.meals, 'createdAt', 5),
     weights: recent('weight', animal.weights, 'createdAt', 5),
     vetVisits: recent('vetVisit', animal.vetVisits, 'visitDate', 5),
-    dairyRecords: animal.species === 'dairy-cattle' ? recent('dairy', animal.dairyRecords, 'recordedOn', 10) : [],
+    ...(hasDairyRecords ? { dairyRecords: recent('dairy', animal.dairyRecords, 'recordedOn', 10) } : {}),
     uncertainFields: Object.fromEntries([...excluded].map(([key, fields]) => [key, [...fields]])),
   }
 }

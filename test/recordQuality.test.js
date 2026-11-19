@@ -27,3 +27,27 @@ test('chat excludes flagged values while keeping unrelated fields and owner dism
   assert.deepEqual(reviewed.uncertainFields, { 'weight:4': ['weight'] })
   assert.equal(chatContext(animal, [{ ...finding, status: 'DISMISSED', active: true }]).weights[0].weight, 42)
 })
+
+test('chat omits dairy categories for pets and retains cattle records with review filtering', async () => {
+  const { chatContext } = await import('../src/quality/chatContext.js')
+  const [, cleanAnimal] = cases.find(([name]) => name === 'clean cat')
+  const animal = {
+    ...cleanAnimal,
+    dairyRecords: [{ id: 91, kind: 'MILK_YIELD', recordedOn: '2026-06-01', liters: 12 }],
+  }
+  const findings = [{
+    active: true, status: 'OPEN',
+    records: [{ type: 'dairy', id: 91, fields: ['liters'] }],
+  }]
+  for (const species of ['cat', 'dog']) {
+    const context = chatContext({ ...animal, species }, findings)
+    assert.equal(Object.hasOwn(context, 'dairyRecords'), false)
+    assert.deepEqual(context.uncertainFields, {})
+    assert.equal(context.profile.species, species)
+  }
+  const cattle = chatContext({ ...animal, species: 'dairy-cattle' }, findings)
+  assert.equal(cattle.dairyRecords[0].id, 91)
+  assert.equal(cattle.dairyRecords[0].liters, undefined)
+  assert.deepEqual(cattle.uncertainFields, { 'dairy:91': ['liters'] })
+  assert.deepEqual(chatContext({ ...animal, species: 'dairy-cattle', dairyRecords: [] }, []).dairyRecords, [])
+})

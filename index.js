@@ -15,6 +15,8 @@ import avatarRoutes from './src/routes/avatarRoutes.js'
 import qualityRoutes from './src/routes/qualityRoutes.js'
 import dairyRoutes from './src/routes/dairyRoutes.js'
 import chatRoutes from './src/routes/chatRoutes.js'
+import listingRoutes from './src/routes/listingRoutes.js'
+import storeRoutes from './src/routes/storeRoutes.js'
 
 const app = express()
 const PORT = process.env.PORT || 7461
@@ -26,6 +28,8 @@ app.use(cors({
 app.use(express.json())
 
 app.use('/api/auth', authRoutes)
+app.use('/api/listings', listingRoutes)
+app.use('/api/store', storeRoutes)
 
 app.use('/api', validateToken, petRoutes)
 
