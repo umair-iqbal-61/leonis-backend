@@ -65,3 +65,20 @@ Frontend assets/design references are in [the frontend register](../leonis-front
 **Decision:** one account with Pets/Livestock preferences, signup choice and later switching; commerce remains shared. Preference changes retain all records and do not confer admin privileges.
 **Affected work:** [behavior/API](docs/workspaces.md), [input validation](src/account/workspaces.js), [account routes](src/routes/accountRoutes.js), [migration](prisma/migrations/20261119020000_workspaces/migration.sql), [tests](test/workspaces.integration.test.js).
 **Evidence/limits:** isolated legacy-fixture backfill and API checks validate behavior, not a new account-authorization model. Owner-scoped APIs remain the security boundary; workspaces are interface organization.
+
+## Deployment on the existing Render/Vercel services
+
+**Researched:** 20 November 2026.
+**Issue:** prepare repeatable v2 builds and migrations while retaining v1 hosting.
+
+| Primary source | Use | Limits |
+| --- | --- | --- |
+| [Render: Node.js versions](https://render.com/docs/node-version) | Bound runtime to Node 24; document higher-precedence dashboard/file overrides. | Existing service settings were not inspected. |
+| [Render: deploy steps](https://render.com/docs/deploys) | Separate installation/client generation, migrations and application startup. Paid-service pre-deploy support is distinguished from a controlled release job for free services. | Current service plan and release-job access remain unconfirmed; no automatic migration was configured. |
+| [Render: health checks](https://render.com/docs/health-checks) | Public `/health` supplies an HTTP liveness target. | Leonis deliberately performs no database query here; database readiness requires a separate check. |
+| [Prisma v7: deploying database changes](https://www.prisma.io/docs/orm/v7/prisma-client/deployment/deploy-database-changes-with-prisma-migrate) | Checked-in migrations and `migrate deploy` in the release workflow; retain Prisma CLI for deployment tooling. | A migration command is not a backup or a guarantee against data loss. Live history must be checked before use. |
+
+**Affected work:** [release guide](docs/deploy-v2.md), package/lock runtime metadata,
+Prisma build script, README/AGENTS commands, and [liveness route](index.js).
+Local preparation does not establish that live database history matches the repo.
+No production settings, secrets, migrations or deployments were changed.

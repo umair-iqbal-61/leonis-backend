@@ -9,7 +9,7 @@ Express/Prisma REST API powering **Leonis** (formerly PawPal), an AI-powered pet
 
 ## Stack
 
-- **Runtime:** Node.js, Express 5 (ESM)
+- **Runtime:** Node.js 24, Express 5 (ESM)
 - **Database:** PostgreSQL via [Neon](https://neon.tech), accessed through Prisma 7 with the `@prisma/adapter-pg` driver adapter
 - **Auth:** JWT + bcrypt (no OAuth)
 - **Storage:** Cloudinary (photo gallery + pet avatars)
@@ -20,7 +20,7 @@ Express/Prisma REST API powering **Leonis** (formerly PawPal), an AI-powered pet
 
 Resources are nested under their owning pet, scoped and ownership-checked via middleware, rather than trusting client-supplied IDs:
 
-\```
+```
 /api/auth/register, /api/auth/login              — public
 /api/pets                                         — CRUD, scoped to the logged-in user
 /api/pets/:petId/meals                            — nested, ownership-verified
@@ -31,7 +31,7 @@ Resources are nested under their owning pet, scoped and ownership-checked via mi
 /api/pets/:petId/avatar
 /api/pets/:petId/chat                             — Groq proxy, pet-context aware
 /api/reminders                                    — flat, cross-pet (for the notification poller)
-\```
+```
 
 **Middleware chain:** `validateToken` (verifies JWT, attaches `req.user`) → `verifyPetOwnership` (confirms the pet belongs to the requesting user, attaches `req.pet`) → route handler.
 
@@ -41,14 +41,14 @@ Resources are nested under their owning pet, scoped and ownership-checked via mi
 
 ## Local setup
 
-\```bash
-npm install
-npx prisma generate
-\```
+```bash
+npm ci
+npm run build
+```
 
 Create a `.env` with:
 
-\```
+```
 DATABASE_URL=
 JWT_SECRET=
 CLOUDINARY_CLOUD_NAME=
@@ -56,21 +56,27 @@ CLOUDINARY_API_KEY=
 CLOUDINARY_API_SECRET=
 GROQ_API_KEY=
 PORT=7461
-\```
+```
 
-Run migrations, then start dev:
+With `DATABASE_URL` configured for a dedicated development database, apply the
+checked-in migrations, then start dev:
 
-\```bash
-npx prisma migrate dev
+```bash
+npx prisma migrate deploy
 npm run dev
-\```
+```
 
 ## Scripts
 
 | Command | Purpose |
 |---|---|
+| `npm run build` | Generate the Prisma client (no database changes) |
 | `npm run dev` | Start with nodemon (local dev) |
 | `npm start` | Start with plain `node` (production) |
+
+See [the v2 deployment guide](docs/deploy-v2.md) before publishing to the existing
+Render/Vercel services. `GET /health` is a public liveness endpoint only; it does
+not check database connectivity or external integrations.
 
 ## Notable build decisions
 

@@ -35,6 +35,11 @@ The remaining challenge-set false positive concerns legitimate equal milk yields
 
 ## Release preparation after the barn milestone
 
+The local runtime/build configuration and a concrete release sequence are now
+documented in [deploy-v2.md](deploy-v2.md). No production deployment or migration
+has been performed. Existing service identity, database history/restore point and
+Render plan still need confirmation before publication.
+
 1. Complete and verify the provisional barn milestone, then confirm the existing v1 frontend, backend and database targets before publishing or applying migrations outside isolated tests. The owner chose to retain v1 hosting.
 2. Configure the actual frontend API base including `/api`, backend CORS origin, service credentials and store-admin role without committing secrets.
 3. Keep checkout closed until actual nationwide delivery rates and parcel limits are configured; do not reuse test rates.

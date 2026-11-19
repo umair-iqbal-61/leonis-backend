@@ -29,6 +29,11 @@ app.use(cors({
 
 app.use(express.json())
 
+// Liveness only. Database, uploads and chat are checked separately at release.
+app.get('/health', (req, res) => {
+  res.set('Cache-Control', 'no-store').json({ status: 'ok' })
+})
+
 app.use('/api/auth', authRoutes)
 app.use('/api/listings', listingRoutes)
 app.use('/api/store', storeRoutes)

@@ -9,7 +9,7 @@ The API defaults to port 7461.
 
 ```bash
 npm ci
-npx prisma generate       # Generates the Prisma client. No application build script.
+npm run build             # Generates the Prisma client; no database changes.
 npx prisma migrate deploy # Apply checked-in migrations to the development database.
 npm run dev               # Nodemon. Use npm start to run without watch mode.
 ```
