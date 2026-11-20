@@ -77,10 +77,17 @@ files remain. The earlier PostgreSQL 17 smoke-test container was untouched.
 
 This verifies a point-in-time database export and migration/data-preservation
 rehearsal. The owner subsequently confirmed that Render uses the production
-endpoint matching this backup. Vercel settings, external uploads/chat after
-release and the final deployed browser workflows still need verification.
+endpoint matching this backup. Vercel settings and a protected frontend preview
+have since been verified. External uploads/chat after release and the final
+deployed browser workflows still need verification. A read-only inspection of
+the local archive also confirmed that the intended existing store-admin username,
+`umairiqbal`, is present exactly once; no account fields were displayed or changed.
 Refresh the backup and record baseline if production changes before the upgrade.
 
+Subsequent release update: the owner resumed publication, the source was checked
+against this backup read-only, and v2 deployed successfully. All original fields
+still matched after migration. See [release results](v2-release-results.md).
+This archive remains the v1 recovery snapshot; later writes are not included.
+
 See [database audit](v2-database-audit.md), [release guide](deploy-v2.md) and
-[research register](../REFERENCES.md). No production migration or deployment has
-been performed.
+[research register](../REFERENCES.md).

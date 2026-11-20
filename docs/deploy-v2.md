@@ -1,13 +1,20 @@
 # Deploy Leonis v2 on the existing hosting
 
+**Release update, 20 November 2026:** v2 is now deployed on both existing services.
+See [release results](v2-release-results.md) for the live deployment IDs, completed
+migrations and remaining private-account checks. The observed v1 settings and
+proposed sequence below are the pre-release preparation record, not current status.
+
 Prepared 20 November 2026. The owner confirmed Render Free, and the Render
 service settings and both Neon branches have now been inspected read-only.
 See [the database audit](v2-database-audit.md): production has six pending v2
 migrations; development has all ten applied. A [local backup, restore and fresh-copy
 migration rehearsal](v2-backup-verification.md) now pass. The owner privately
 confirmed Render's production database target. Vercel settings have now been
-inspected read-only. Production migration/publication still require the final
-release review; a protected `version-two` frontend preview is being prepared.
+inspected read-only. Both `version-two` branches are published, and the protected
+frontend preview is READY with mobile, theme and Urdu layout checks complete.
+Production migration/publication still require the final
+[release review](v2-production-release-review.md).
 
 ## Targets and release order
 
@@ -140,10 +147,11 @@ exists; separately confirm a recovery option and its usable retention window.
 
 A GitHub Actions manual-dispatch workflow would need to exist on the default
 branch. The proposed Free-service start gate avoids requiring a new CI workflow,
-copying database credentials to CI or changing `main`/the default branch. Neither
-repository has a remote `version-two` branch yet, verified through GitHub on
-20 November 2026. Inspect Vercel's production-branch behavior before publishing
-the frontend branch; keep Render auto-deploy off for the controlled release.
+copying database credentials to CI or changing `main`/the default branch. Both
+remote `version-two` branches are now published. Vercel still tracks `main` for
+production; the frontend push created a protected preview. The exact candidate
+commits are frozen in the [release review](v2-production-release-review.md).
+Keep Render auto-deploy off for the controlled release.
 
 `GET /health` returns `200 {"status":"ok"}` without authentication or database
 queries. It checks process liveness only; database, AI and storage readiness
@@ -201,6 +209,21 @@ the preview to interface/assets/routes/build review; do not create real accounts
 or orders through it. It is not proof that preview API workflows work. After
 release approval, deploy/migrate the backend first, then build/release the
 frontend for its custom production domain and verify those hosted workflows.
+
+The verified preview is
+<https://pawpal-36yl9p5ci-umair-iqbal-projects.vercel.app>, deployment
+`dpl_5czEmqdRv8BbqxGwZNBu2aM9ztAc`, source
+`bdc031dbbd817150a4f83737199afd162c7376e9`. Landing/signup, direct-route reloads,
+320/390 px layouts, light/dark themes and English/Urdu RTL were checked without
+creating accounts or orders. The production custom domain still points to the
+old deployment listed above.
+
+For the approved release, disable custom-domain auto-assignment before changing
+production tracking to `version-two`. Build the frozen commit as a **production**
+deployment with the production API variable, inspect it, then promote that same
+build. A preview promotion would rebuild with production configuration. Keep
+future publication manual: verify auto-assignment is disabled after promotion
+and Render auto-deploy remains off. No live setting has been changed yet.
 
 ## Verification and store setup
 

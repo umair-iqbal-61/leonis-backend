@@ -35,6 +35,15 @@ The remaining challenge-set false positive concerns legitimate equal milk yields
 
 ## Release preparation after the barn milestone
 
+**Current release status:** the owner resumed the held release on 20 November
+2026. The six production migrations and both hosting deployments succeeded.
+Original records match the backup, `umairiqbal` has the intended store-admin
+role, checkout remains closed, and public mobile/API/CORS checks pass. Future
+publication is manual on both hosts. The owner confirmed live login after a
+production password reset; other authenticated browser checks remain pending.
+See [release results](v2-release-results.md) for exact deployed commits
+and verification limits. The preparation record below describes the earlier state.
+
 The local runtime/build configuration and a concrete release sequence are now
 documented in [deploy-v2.md](deploy-v2.md). No production deployment or migration
 has been performed. The owner confirmed Render Free on 20 November 2026; a
@@ -49,8 +58,13 @@ passed: original records/ID sequences are preserved and all ten migrations match
 the repository. The owner privately confirmed Render's production endpoint.
 Vercel inspection now confirms the `pawpal` Vite project, Node 24, Production
 tracking `main`, default build settings and the correct public API base. Provider
-access is verified for both hosts. A protected frontend preview is being prepared;
-production release approval and final hosted checks remain outstanding. No Neon
+access is verified for both hosts. Both `version-two` branches are pushed, and
+the protected frontend preview is READY. Landing/signup, 320/390 px layouts,
+light/dark themes, English/Urdu RTL and direct-route reloads passed; preview API
+workflows were not tested because production CORS excludes the preview origin.
+The [release review](v2-production-release-review.md) freezes exact candidate
+commits and the remaining production actions. Production release approval and
+final hosted checks remain outstanding. No Neon
 application data/schema or production settings/deployments have been changed.
 
 1. Complete and verify the provisional barn milestone, then confirm the existing v1 frontend, backend and database targets before publishing or applying migrations outside isolated tests. The owner chose to retain v1 hosting.

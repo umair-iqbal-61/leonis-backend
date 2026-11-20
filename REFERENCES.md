@@ -140,3 +140,40 @@ No production settings, secrets, migrations or deployments were changed.
 - Vercel's API first required authorization for `umair-iqbal-projects`; the owner approved its single-use team-consent link. Project/deployment/public-variable reads then succeeded. [Frontend inspection register](../leonis-frontend/REFERENCES.md#authenticated-vercel-release-inspection) records exact team/project/deployment identities. Build commands and production branch were verified in the Dashboard because the connector omits them.
 - **Use:** prepare dedicated `version-two` branches and a protected frontend preview while Production tracks `main`. The preview is an interface/build review, not a production-API smoke test; the production CORS allowlist excludes preview domains. No new CORS permission or production setting was added.
 - **Limits:** source checks and local migration rehearsal pass, but publication/migration still require the final release review and hosted validation. No credential was retrieved except the explicitly public frontend API base.
+
+### Published candidates and final release review
+
+**Checked:** 20 November 2026, updating the earlier unpublished-branch and pending-preview notes.
+
+- Both `version-two` branches are pushed. The [production release review](docs/v2-production-release-review.md) freezes the exact remote candidate commits and records the unchanged live deployment IDs. Later local documentation changes do not alter those candidates.
+- Vercel reports the protected frontend candidate READY. Browser checks covered landing/signup, direct-route reloads, 320/390 px widths, English/Urdu RTL and light/dark themes. No production account/order was created; preview API workflows remain outside the verified scope because CORS excludes its origin.
+- A local archive check confirmed the requested existing admin username exactly once without printing other account fields. This is backup evidence, not proof of a later production role grant.
+- [Vercel: staging and promoting a production deployment](https://vercel.com/docs/deployments/promoting-a-deployment#staging-and-promoting-a-production-deployment) documents disabling domain auto-assignment before staging and promoting the same production build without a rebuild. [Project update API](https://vercel.com/docs/rest-api/projects/update-an-existing-project) exposes `autoAssignCustomDomains` and build/install/output settings. The connector does not expose production-branch updates, so branch tracking requires the Dashboard.
+- **Limits:** the production release is proposed, not performed. Backup freshness, actual migration/deployment results, live admin access and final hosted API checks remain release-time work. Render auto-deploy and Vercel automatic domain assignment are proposed to remain disabled for manual releases.
+
+### Executed production release
+
+**Checked:** 20 November 2026, after the owner resumed the held release. This supersedes the pending-publication notes above.
+
+- **Direct evidence:** Render deployment `dep-dbvvt33rjlhs73fu1n80` is live on the frozen backend candidate; migration logs show all six pending migrations succeeded. Vercel production deployment `dpl_6tdh3MqhPWFiULQn7iKdXYWa1pnX` is READY, and the alias API confirms it serves the existing custom domain.
+- **Database evidence:** read-only aggregate comparisons before and after migration matched all original fields/counts across seven legacy tables. All ten migration checksums match. Workspace validity and closed/unconfigured checkout passed. A guarded owner-authorized grant then enabled only the named existing store admin.
+- **Operational evidence:** public HTTP/API/CORS and anonymous-access checks pass; live mobile store/marketplace render in Urdu RTL and both themes. Render's post-live error-level query returned no logs. Future publication remains manual on both hosts.
+- **Affected work / limits:** [release results](docs/v2-release-results.md) records exact versions and remaining private-account browser checks. No secret values, new dependencies, paid resources or `main` changes were involved. Existing pre-release backups do not contain later v2 writes.
+
+### Release dependency audit follow-up
+
+**Checked:** 20 November 2026, after npm reported audit warnings during the Render build.
+
+- [Effect advisory GHSA-7589-6fvf-x4pw](https://github.com/advisories/GHSA-7589-6fvf-x4pw) describes regex denial of service in `Schema.TemplateLiteral` when untrusted inputs reach affected schemas; the publisher lists `3.22.1` as patched.
+- **Local evidence:** `npm audit --omit=dev --json --ignore-scripts` reports three high-severity entries on the Prisma/config/Effect dependency chain. Handwritten app/config sources contain no direct Effect or TemplateLiteral use. This does not establish transitive exploitability or prove absence of exposure.
+- **Follow-up review:** `npm ls effect @prisma/config prisma @prisma/client --omit=dev` confirms `@prisma/client@7.9.1` → `prisma@7.10.1` → `@prisma/config@7.10.1` → `effect@3.20.0`. The installed `@prisma/config` declares an exact Effect pin and uses Effect schemas to decode Prisma CLI configuration. Its bundled entry point contains no `TemplateLiteral` reference. Leonis's CLI configuration reads the schema and migration paths and obtains the database URL from the process environment. This static review found no path from application requests to the affected decoder in the inspected code. It did not trace every bundled dependency at runtime.
+- [Prisma ORM release status](https://www.prisma.io/docs/orm/release-status) documents the Prisma 8 CLI transition and the need to retain Prisma 7 for the existing generate and migration workflow. With owner approval, evaluate a scoped npm override to `3.22.1` on development and verify dependency resolution, client generation, migration commands and backend tests before considering manual publication. The override needs compatibility testing because it replaces an exact upstream pin.
+- **Use / limits:** [release results](docs/v2-release-results.md) tracks compatible dependency maintenance as follow-up. No automatic major Prisma downgrade, package upgrade or lockfile change was made. Any upgrade needs owner approval and targeted compatibility checks.
+
+### Owner-confirmed production login recovery
+
+**Recorded:** 20 November 2026; source is the owner's report and inspected local reset-script behavior, not external research.
+
+- The password-reset script targets its configured database. The owner initially reset the separate development database, then successfully reset the existing live account using a temporary production connection override with dotenv disabled. No `.env` edits or password sharing were requested.
+- The supplied command checked the confirmed production endpoint/database before running `scripts/resetPassword.js umairiqbal`. The owner confirmed the new password works on the live website.
+- **Limits:** the existing reset script remains untracked. Login was confirmed by the owner; remaining authenticated features were not independently rechecked after release. See [release results](docs/v2-release-results.md).
