@@ -40,7 +40,9 @@ The remaining challenge-set false positive concerns legitimate equal milk yields
 Original records match the backup, `umairiqbal` has the intended store-admin
 role, checkout remains closed, and public mobile/API/CORS checks pass. Future
 publication is manual on both hosts. The owner confirmed live login after a
-production password reset; other authenticated browser checks remain pending.
+production password reset. The signed-in follow-up confirmed store admin,
+My orders and saved workspace persistence. Switching, legacy records, quality
+PDF exports and live AI context are still pending.
 See [release results](v2-release-results.md) for exact deployed commits
 and verification limits. The preparation record below describes the earlier state.
 

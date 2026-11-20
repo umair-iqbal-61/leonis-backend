@@ -3,7 +3,8 @@
 The owner resumed the held production release. The reviewed backend/frontend
 candidates were deployed on the existing hosting; neither `main` was changed.
 The owner has confirmed successful live login after resetting the production
-account password. The remaining authenticated feature checks are still pending.
+account password. The signed-in follow-up confirmed workspace persistence and
+store access. See below for the checks that still need records.
 
 ## Released versions
 
@@ -73,15 +74,25 @@ limits. The backup is the pre-release v1 snapshot, not a backup of later v2 writ
   override cleared. Existing preview checks cover landing/signup as well.
 - No Render error-level logs were returned from the post-live release window.
 
-## Remaining verification
+## Signed-in verification and remaining checks
 
 The owner confirmed that the production password reset succeeded and the new
 password works on the live website. Development and production are separate
 databases; the reset was run with a temporary production connection override
 and dotenv disabled, without changing the local `.env` file or sharing secrets.
-This confirms owner login, not independent agent verification of private features.
-Private records, workspace switching, reports, admin UI and live AI still need
-post-release browser verification. No credentials were requested in chat.
+On 20 November 2026, browser checks in the signed-in store-admin session confirmed:
+
+- My orders loaded and showed no order requests. Store admin opened its Products
+  page and showed an empty catalogue. The shipping settings screen opened.
+- Pets was the saved active and only enabled workspace after reload. The Pets
+  page finished loading and displayed its empty state.
+- Pets, Manage workspaces, Store admin Products, Shipping settings and My orders
+  fit at 390 px in dark mode with Urdu RTL and no horizontal overflow. The prior
+  language was restored and the temporary viewport override was cleared.
+
+Workspace switching requires a second enabled workspace. Legacy record views,
+English and Urdu quality PDF exports, and live AI context still require a session
+with existing records. No disposable accounts, animals, orders or uploads were created.
 No dependency changes or paid hosting resources were added during release.
 
 The build reported dependency audit warnings. A subsequent read-only
