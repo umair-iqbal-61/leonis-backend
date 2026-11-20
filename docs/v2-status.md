@@ -47,8 +47,11 @@ with matching checksums. Production has a six-hour recovery window and no
 snapshots. A [local database export, restore and fresh-copy migration rehearsal](v2-backup-verification.md)
 passed: original records/ID sequences are preserved and all ten migrations match
 the repository. The owner privately confirmed Render's production endpoint.
-Vercel settings, release approval and final hosted checks remain outstanding. No Neon application data/schema,
-production settings or deployments have been changed.
+Vercel inspection now confirms the `pawpal` Vite project, Node 24, Production
+tracking `main`, default build settings and the correct public API base. Provider
+access is verified for both hosts. A protected frontend preview is being prepared;
+production release approval and final hosted checks remain outstanding. No Neon
+application data/schema or production settings/deployments have been changed.
 
 1. Complete and verify the provisional barn milestone, then confirm the existing v1 frontend, backend and database targets before publishing or applying migrations outside isolated tests. The owner chose to retain v1 hosting.
 2. Configure the actual frontend API base including `/api`, backend CORS origin, service credentials and store-admin role without committing secrets.

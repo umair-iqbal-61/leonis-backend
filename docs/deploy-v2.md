@@ -5,8 +5,9 @@ service settings and both Neon branches have now been inspected read-only.
 See [the database audit](v2-database-audit.md): production has six pending v2
 migrations; development has all ten applied. A [local backup, restore and fresh-copy
 migration rehearsal](v2-backup-verification.md) now pass. The owner privately
-confirmed Render's production database target. Vercel settings and the reviewed
-publication steps remain outstanding.
+confirmed Render's production database target. Vercel settings have now been
+inspected read-only. Production migration/publication still require the final
+release review; a protected `version-two` frontend preview is being prepared.
 
 ## Targets and release order
 
@@ -152,6 +153,33 @@ frontend origin needs an explicit allowlist change before browser testing.
 
 ## Vercel frontend settings
 
+### Existing project verified 20 November 2026
+
+Team `umair-iqbal-projects` (`team_ccX4WP2OdLmzaYOWueANezns`), project `pawpal`
+(`prj_y5f5XOMdECDq48FmhFLTTElmGtdm`), Git source
+`umair-iqbal-61/leonis-frontend`. Vercel connector access succeeded after the
+owner approved its team authorization. Build/Git details omitted by the connector
+were read from the authenticated Dashboard.
+
+| Setting | Observed current value |
+| --- | --- |
+| Production branch | `main` |
+| Custom-domain auto-assignment | Enabled |
+| Current production commit | `fab97adeafb6a2220430e626d1e0f67e44ac7db9` |
+| Current production deployment | `dpl_2oUtCasqWLjmGRj19ND6fE1WxxJn`, READY |
+| Primary domain | `pawpal.umairiqbal.tech` |
+| Node / framework | `24.x` / Vite |
+| Root directory | Unset (repository root) |
+| Build / output / install overrides | Disabled; framework/lockfile detection |
+| Public API base | `https://pawpal-backend-ekyt.onrender.com/api`, Production and Preview |
+| Generated-deployment access | Vercel Authentication enabled outside custom domains |
+
+No live settings were changed during inspection. Provider access is now verified
+for both existing services; the Render MCP cannot edit branch/build/start
+settings, so those changes need the Dashboard after approval.
+
+### Proposed v2 settings
+
 | Setting | Value |
 | --- | --- |
 | Framework preset | Vite |
@@ -165,6 +193,14 @@ frontend origin needs an explicit allowlist change before browser testing.
 For staging, use the staging API base instead. Vite embeds this public value at
 build time; changing it requires a new build. The existing `vercel.json` rewrite
 supports SPA routes, including `/livestock`, `/barns`, and `/store/orders`.
+
+With Production still tracking `main`, pushing frontend `version-two` creates a
+protected preview only. Its public API variable currently points to production,
+and that API permits only the custom domain and localhost through CORS. Limit
+the preview to interface/assets/routes/build review; do not create real accounts
+or orders through it. It is not proof that preview API workflows work. After
+release approval, deploy/migrate the backend first, then build/release the
+frontend for its custom production domain and verify those hosted workflows.
 
 ## Verification and store setup
 
