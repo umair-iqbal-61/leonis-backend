@@ -44,9 +44,11 @@ variable names; the actual running Node version is unverified because old logs
 expired. [Neon inspection](v2-database-audit.md) verified the named production
 branch's four completed v1 migrations and development's ten completed migrations,
 with matching checksums. Production has a six-hour recovery window and no
-snapshots. Backup/restore verification, fresh-copy rehearsal, confirmation of
-Render's masked database target and Vercel settings remain outstanding. No
-application data, schema, production settings or deployments have been changed.
+snapshots. A [local database export, restore and fresh-copy migration rehearsal](v2-backup-verification.md)
+passed: original records/ID sequences are preserved and all ten migrations match
+the repository. Confirmation of Render's masked database target, Vercel settings
+and final hosted checks remain outstanding. No Neon application data/schema,
+production settings or deployments have been changed.
 
 1. Complete and verify the provisional barn milestone, then confirm the existing v1 frontend, backend and database targets before publishing or applying migrations outside isolated tests. The owner chose to retain v1 hosting.
 2. Configure the actual frontend API base including `/api`, backend CORS origin, service credentials and store-admin role without committing secrets.

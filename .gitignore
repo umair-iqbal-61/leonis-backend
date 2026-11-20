@@ -9,3 +9,6 @@ build/
 .vscode
 .windsurf
 plan.md
+
+# Private release exports and restore-verification records
+/.local-backups/

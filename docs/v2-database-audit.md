@@ -1,10 +1,12 @@
 # Neon release preflight — 20 November 2026
 
-Authenticated inspection after owner authorization. Only metadata and aggregate
+Initial authenticated inspection after owner authorization. Only metadata and aggregate
 counts were queried, inside `BEGIN READ ONLY`; both branches returned
 `transaction_read_only = on`. No migration, restore, reset, snapshot or branch
 creation was performed. SQL Editor query history may retain these metadata-only
-queries; application data and schema were unchanged.
+queries; application data and schema were unchanged. The subsequent
+[local backup and rehearsal](v2-backup-verification.md) is now verified; its
+migrations/restores ran only on disposable local copies.
 
 ## Confirmed project and branches
 
@@ -72,16 +74,16 @@ check or proof of a completed restore rehearsal.
 ## Recovery and next steps
 
 The production Backup & Restore screen showed a **six-hour history window**, no
-snapshots and no backup schedule. A restorable release backup has not yet been
-created or verified.
+snapshots and no backup schedule. A local release export has since been created,
+restored and verified; see [the verification record](v2-backup-verification.md).
 
-1. Choose a local PostgreSQL export or a Neon snapshot. Use PostgreSQL 18 (or
-   newer compatible) client tools for a `pg_dump` backup; only Docker is
-   currently installed locally. Keep any export private, outside version control,
-   and verify it by restoring into a disposable database. Do not print its data.
-2. Rehearse the six pending migrations on a fresh dedicated copy of production;
-   preserve existing `dev`. Verify original IDs, ownership and record contents,
-   then exercise v2 against that copy.
+1. Completed: owner chose a local export. PostgreSQL 18.7 Docker tools exported
+   the public application schema to an owner-only, Git-ignored archive. Restore
+   succeeded with all original record counts and four migration checksums intact.
+2. Completed for database migration/data preservation: six pending migrations
+   applied to a separate local clone; all original records and ID sequences
+   remained intact. All ten migrations match repository checksums. Existing Neon
+   `dev` was preserved. Final hosted application workflows remain release checks.
 3. Confirm the Render target privately, inspect Vercel settings, and finalize the
    controlled migration method supported by Render Free. No runner or production
    migration command has been configured automatically.

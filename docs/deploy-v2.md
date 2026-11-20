@@ -3,8 +3,9 @@
 Prepared 20 November 2026. The owner confirmed Render Free, and the Render
 service settings and both Neon branches have now been inspected read-only.
 See [the database audit](v2-database-audit.md): production has six pending v2
-migrations; development has all ten applied. Render's actual database target,
-a verified release backup and fresh-copy rehearsal remain outstanding.
+migrations; development has all ten applied. A [local backup, restore and fresh-copy
+migration rehearsal](v2-backup-verification.md) now pass. Render's actual database
+target, Vercel settings and the reviewed publication steps remain outstanding.
 
 ## Targets and release order
 
