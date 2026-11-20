@@ -90,9 +90,15 @@ On 20 November 2026, browser checks in the signed-in store-admin session confirm
   fit at 390 px in dark mode with Urdu RTL and no horizontal overflow. The prior
   language was restored and the temporary viewport override was cleared.
 
-Workspace switching requires a second enabled workspace. Legacy record views,
-English and Urdu quality PDF exports, and live AI context still require a session
-with existing records. No disposable accounts, animals, orders or uploads were created.
+With owner approval, Livestock was temporarily enabled. Switching from Pets to
+Livestock opened `/livestock` and showed the Barns link. Livestock stayed active
+after a reload, and switching back opened `/pets`. The original Pets-only
+configuration was restored and verified after another reload. The cattle view
+showed its empty state, and a repeat Pets check also showed its empty state.
+
+Legacy record views, English and Urdu quality PDF exports, and live AI context
+still require a session with existing animal records. No disposable accounts,
+animals, orders or uploads were created.
 No dependency changes or paid hosting resources were added during release.
 
 The build reported dependency audit warnings. A subsequent read-only
