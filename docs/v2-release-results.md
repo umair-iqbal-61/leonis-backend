@@ -4,7 +4,8 @@ The owner resumed the held production release. The reviewed backend/frontend
 candidates were deployed on the existing hosting; neither `main` was changed.
 The owner has confirmed successful live login after resetting the production
 account password. The signed-in follow-up confirmed workspace persistence and
-store access. See below for the checks that still need records.
+store access, existing pet records and live AI context. Actual PDF export
+verification remains pending.
 
 ## Released versions
 
@@ -96,9 +97,20 @@ after a reload, and switching back opened `/pets`. The original Pets-only
 configuration was restored and verified after another reload. The cattle view
 showed its empty state, and a repeat Pets check also showed its empty state.
 
-Legacy record views, English and Urdu quality PDF exports, and live AI context
-still require a session with existing animal records. No disposable accounts,
-animals, orders or uploads were created.
+The owner then signed in with an existing account that had animal records. One
+existing pet profile and its saved meal and weight history loaded. The quality
+report populated six count groups in English and Urdu and used the expected
+LTR and RTL directions. The profile, report and chat layout checks passed at a
+390 px viewport in dark mode and Urdu RTL. English and the original viewport
+were restored. Both localized Save as PDF actions went through browser printing.
+The in-app browser timed out while invoking print and exposed no saved file or
+accessible preview, so the exported PDFs remain unverified.
+
+With the owner's approval, one live Groq chat request asked for the latest saved
+weight and meal. The answer matched the meal name and amount, weight, and both
+record dates. It included no dairy section. The sampled report had no findings,
+so this live check did not exercise withholding of flagged values. No disposable
+accounts, animals, orders or uploads were created.
 No dependency changes or paid hosting resources were added during release.
 
 The build reported dependency audit warnings. A subsequent read-only

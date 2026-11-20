@@ -42,8 +42,10 @@ role, checkout remains closed, and public mobile/API/CORS checks pass. Future
 publication is manual on both hosts. The owner confirmed live login after a
 production password reset. The signed-in follow-up confirmed store admin,
 My orders, switching between Pets and Livestock, and workspace persistence. The
-original Pets-only preference was restored. Legacy records, quality PDF exports
-and live AI context are still pending because both animal lists were empty.
+original Pets-only preference was restored. A separate existing account with
+records confirmed the pet profile and history, localized quality report views
+and a live AI reply grounded in saved records. English and Urdu PDF files remain
+unverified because the in-app browser could not complete browser printing.
 See [release results](v2-release-results.md) for exact deployed commits
 and verification limits. The preparation record below describes the earlier state.
 
