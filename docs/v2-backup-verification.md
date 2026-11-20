@@ -76,10 +76,10 @@ files remain. The earlier PostgreSQL 17 smoke-test container was untouched.
 ## Remaining release checks
 
 This verifies a point-in-time database export and migration/data-preservation
-rehearsal. It does not verify Vercel settings, the actual target of Render's masked
-database URL, external uploads/chat after release or the final deployed browser
-workflows. Those checks still precede/complete publication. Refresh the backup
-and record baseline if production changes before the real upgrade.
+rehearsal. The owner subsequently confirmed that Render uses the production
+endpoint matching this backup. Vercel settings, external uploads/chat after
+release and the final deployed browser workflows still need verification.
+Refresh the backup and record baseline if production changes before the upgrade.
 
 See [database audit](v2-database-audit.md), [release guide](deploy-v2.md) and
 [research register](../REFERENCES.md). No production migration or deployment has

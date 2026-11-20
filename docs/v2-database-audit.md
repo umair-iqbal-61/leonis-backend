@@ -23,11 +23,11 @@ Database/schema: `neondb` / `public`; production reported PostgreSQL
 5 accounts and 22 animal profiles. Do not reset it for rehearsal: it contains
 the owner's existing development work.
 
-**Target limitation:** the Render `DATABASE_URL` value remained masked. The
-Neon branch names alone do not prove which database Render currently uses.
-Before release, the owner must privately confirm that Render's URL targets
-`ep-empty-scene-b2rdh2v6` (or its pooled hostname) if `production` is intended.
-No connection string or credential needs to be shared.
+**Target confirmation:** on 20 November 2026 the owner privately checked Render's
+`DATABASE_URL` and confirmed the **production endpoint**,
+`ep-empty-scene-b2rdh2v6` (or its pooled hostname). The exported production branch
+therefore matches the intended Render database. This is owner confirmation;
+the agent kept the URL masked and did not access the connection string/password.
 
 ## Production aggregate baseline
 
@@ -84,9 +84,9 @@ restored and verified; see [the verification record](v2-backup-verification.md).
    applied to a separate local clone; all original records and ID sequences
    remained intact. All ten migrations match repository checksums. Existing Neon
    `dev` was preserved. Final hosted application workflows remain release checks.
-3. Confirm the Render target privately, inspect Vercel settings, and finalize the
-   controlled migration method supported by Render Free. No runner or production
-   migration command has been configured automatically.
+3. Render's target is now confirmed by the owner. Inspect Vercel settings and
+   review the proposed migration-gated start command supported by Render Free.
+   No production migration command has been configured automatically.
 4. Present the specific release changes before production migration/deployment.
    Refresh the backup and baseline if production receives writes in the meantime.
 

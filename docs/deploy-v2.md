@@ -4,8 +4,9 @@ Prepared 20 November 2026. The owner confirmed Render Free, and the Render
 service settings and both Neon branches have now been inspected read-only.
 See [the database audit](v2-database-audit.md): production has six pending v2
 migrations; development has all ten applied. A [local backup, restore and fresh-copy
-migration rehearsal](v2-backup-verification.md) now pass. Render's actual database
-target, Vercel settings and the reviewed publication steps remain outstanding.
+migration rehearsal](v2-backup-verification.md) now pass. The owner privately
+confirmed Render's production database target. Vercel settings and the reviewed
+publication steps remain outstanding.
 
 ## Targets and release order
 
@@ -68,7 +69,7 @@ was changed, deployment triggered or database accessed during this inspection.
 | Branch | `version-two` for this release |
 | Runtime | Node 24; `package.json` specifies `24.x` |
 | Build command | `npm ci --include=dev && npm run build` |
-| Start command | `npm start` |
+| Start command | `npx prisma migrate deploy && npm start`, only after release approval |
 | Optional HTTP health-check path | `/health` |
 
 Check for an existing Render `NODE_VERSION` setting or `.node-version`/`.nvmrc`
@@ -91,24 +92,36 @@ npx prisma migrate status
 ```
 
 Render supports a separate pre-deploy command on paid services. Where available,
-use `npx prisma migrate deploy` there. On a free service, arrange a controlled
-CI/release job with the same checked-in migrations and securely supplied target
-configuration before starting the new API. Do not assume a paid shell/pre-deploy
-feature exists, and do not silently add database changes to the build command.
-The chosen production migration method remains a release decision.
+use `npx prisma migrate deploy` there with `npm start` as the start command. For
+the confirmed Free service, the proposed release method is the explicit start
+command below. Database changes stay out of the build command. This has not been
+configured on the live service and requires review/approval before use.
 
 ### Confirmed free-plan path
 
 The owner confirmed **Free** on 20 November 2026. No paid pre-deploy command or
-Render shell is available on that service. Keep the build/start commands above;
-run migrations separately in the approved release context before publishing v2.
+Render shell is available on that service. Proposed start command:
+
+```bash
+npx prisma migrate deploy && npm start
+```
+
+It uses Render's existing server-only database configuration, applies pending
+checked-in migrations, and starts the API only if migration succeeds. It runs on
+each service start; once all migrations are applied, the migration step has
+nothing pending. Future changes must still be reviewed before manual deploys.
+This is a Leonis engineering choice based on Prisma's documented migrate-before-
+start pattern and Render's configurable start command; it is not a separate
+Render pre-deploy phase. Local `npm start` remains unchanged and never migrates.
 
 The existing service is linked to `main` with On Commit auto-deploy. During the
 approved release, disable auto-deploy before changing its linked branch or
-commands, then deploy the reviewed v2 commit manually after migration checks.
-Do not push to `main` to release this work. First privately confirm the Neon
-target, restore point and migration history before choosing/configuring the
-release runner. No hosting setting has been changed yet.
+commands. Once settings, backup and source commits are reviewed, manually deploy
+the v2 commit; its start command applies the six pending migrations before the
+API listens. Then verify migration logs and application readiness before releasing
+the frontend. Do not push to `main`. The owner has privately confirmed the Neon
+production target; its backup and fresh-copy rehearsal are verified. No hosting
+setting has been changed yet.
 
 Use [v2-database-preflight.sql](v2-database-preflight.sql) in the confirmed Neon
 database's SQL Editor to inspect table names, migration names/checksums/status
@@ -124,10 +137,12 @@ its parent. Confirm the actual project's plan/branch limits and selected parent
 before creating one. Branching is not evidence that a restorable release backup
 exists; separately confirm a recovery option and its usable retention window.
 
-A GitHub Actions manual-dispatch workflow must exist on the repository's default
-branch to be triggered. Adding it only to `version-two` does not establish a
-working release job. No workflow, default-branch change or change to `main` has
-been made. The runner must be settled before attempting the production migration.
+A GitHub Actions manual-dispatch workflow would need to exist on the default
+branch. The proposed Free-service start gate avoids requiring a new CI workflow,
+copying database credentials to CI or changing `main`/the default branch. Neither
+repository has a remote `version-two` branch yet, verified through GitHub on
+20 November 2026. Inspect Vercel's production-branch behavior before publishing
+the frontend branch; keep Render auto-deploy off for the controlled release.
 
 `GET /health` returns `200 {"status":"ok"}` without authentication or database
 queries. It checks process liveness only; database, AI and storage readiness

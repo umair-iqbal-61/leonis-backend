@@ -37,8 +37,8 @@ The remaining challenge-set false positive concerns legitimate equal milk yields
 
 The local runtime/build configuration and a concrete release sequence are now
 documented in [deploy-v2.md](deploy-v2.md). No production deployment or migration
-has been performed. The owner confirmed Render Free on 20 November 2026; use a
-separate migration release step. Read-only Render inspection verified the live
+has been performed. The owner confirmed Render Free on 20 November 2026; a
+migration-before-start gate is proposed, pending approval. Read-only Render inspection verified the live
 `main` deployment, build/start commands, On Commit auto-deploy and configured
 variable names; the actual running Node version is unverified because old logs
 expired. [Neon inspection](v2-database-audit.md) verified the named production
@@ -46,8 +46,8 @@ branch's four completed v1 migrations and development's ten completed migrations
 with matching checksums. Production has a six-hour recovery window and no
 snapshots. A [local database export, restore and fresh-copy migration rehearsal](v2-backup-verification.md)
 passed: original records/ID sequences are preserved and all ten migrations match
-the repository. Confirmation of Render's masked database target, Vercel settings
-and final hosted checks remain outstanding. No Neon application data/schema,
+the repository. The owner privately confirmed Render's production endpoint.
+Vercel settings, release approval and final hosted checks remain outstanding. No Neon application data/schema,
 production settings or deployments have been changed.
 
 1. Complete and verify the provisional barn milestone, then confirm the existing v1 frontend, backend and database targets before publishing or applying migrations outside isolated tests. The owner chose to retain v1 hosting.
