@@ -4,8 +4,8 @@ The owner resumed the held production release. The reviewed backend/frontend
 candidates were deployed on the existing hosting; neither `main` was changed.
 The owner has confirmed successful live login after resetting the production
 account password. The signed-in follow-up confirmed workspace persistence and
-store access, existing pet records and live AI context. Actual PDF export
-verification remains pending.
+store access, existing pet records and live AI context. The owner confirmed that
+both the English and Urdu quality PDF exports work on 21 November 2026.
 
 ## Released versions
 
@@ -104,7 +104,8 @@ LTR and RTL directions. The profile, report and chat layout checks passed at a
 390 px viewport in dark mode and Urdu RTL. English and the original viewport
 were restored. Both localized Save as PDF actions went through browser printing.
 The in-app browser timed out while invoking print and exposed no saved file or
-accessible preview, so the exported PDFs remain unverified.
+accessible preview. On 21 November 2026 the owner independently checked both
+exported PDFs and reported that they worked.
 
 With the owner's approval, one live Groq chat request asked for the latest saved
 weight and meal. The answer matched the meal name and amount, weight, and both

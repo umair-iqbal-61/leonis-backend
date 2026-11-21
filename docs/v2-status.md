@@ -44,8 +44,8 @@ production password reset. The signed-in follow-up confirmed store admin,
 My orders, switching between Pets and Livestock, and workspace persistence. The
 original Pets-only preference was restored. A separate existing account with
 records confirmed the pet profile and history, localized quality report views
-and a live AI reply grounded in saved records. English and Urdu PDF files remain
-unverified because the in-app browser could not complete browser printing.
+and a live AI reply grounded in saved records. On 21 November 2026 the owner
+confirmed that both English and Urdu quality PDF exports worked.
 See [release results](v2-release-results.md) for exact deployed commits
 and verification limits. The preparation record below describes the earlier state.
 
