@@ -1,15 +1,12 @@
 import express from 'express'
-import multer from 'multer'
 import prisma from '../lib/prisma.js'
 import cloudinary from '../lib/cloudinary.js'
+import { petImageUpload } from '../lib/petImageUpload.js'
 
 const router = express.Router()
-const upload = multer({ storage: multer.memoryStorage() })
 
 // ADD/UPDATE the avatar for a pet
-router.post('/avatar', upload.single('photo'), async (req, res) => {
-  if (!req.file) return res.status(400).json({ message: "No avatar uploaded!" })
-
+router.post('/avatar', petImageUpload, async (req, res) => {
   try {
     const uploadResult = await new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(

@@ -3,12 +3,17 @@ import express from 'express'
 import prisma from '../lib/prisma.js'
 
 const router = express.Router()
+const positiveWeight = value => ['number', 'string'].includes(typeof value) && Number.isFinite(Number(value)) && Number(value) > 0
+
+function invalidWeight(res) {
+  return res.status(400).json({ code: 'INVALID_WEIGHT', message: 'Enter a weight greater than zero.' })
+}
 
 // CREATE a weight for specific pet
 router.post('/weights', async (req, res) => {
   const { weight, notes } = req.body
 
-  if (!weight) return res.status(400).json({ message: "Weight is required!" })
+  if (!positiveWeight(weight)) return invalidWeight(res)
 
   try {
     const newWeight = await changeAnimal(req.pet.id, tx => tx.weight.create({
@@ -67,6 +72,7 @@ router.get('/weights/:weightId', async (req, res) => {
 // UPDATE a weight for specific pet
 router.patch('/weights/:weightId', async (req, res) => {
   const { weight, notes } = req.body
+  if (weight !== undefined && !positiveWeight(weight)) return invalidWeight(res)
 
   try {
     const updateWeight = await changeAnimal(req.pet.id, tx => tx.weight.update({
