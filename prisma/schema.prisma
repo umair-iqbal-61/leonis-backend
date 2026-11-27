@@ -22,6 +22,15 @@ model User {
   id       Int    @id @default(autoincrement())
   username String @unique
   password String
+  email String? @unique
+  emailVerifiedAt DateTime?
+  pendingEmail String?
+  requiresEmailVerification Boolean @default(false)
+  verificationTokenHash String? @unique
+  verificationExpiresAt DateTime?
+  passwordResetTokenHash String? @unique
+  passwordResetExpiresAt DateTime?
+  sessionVersion Int @default(0)
   pets     Pet[]
   listings Listing[]
   isStoreAdmin Boolean @default(false)

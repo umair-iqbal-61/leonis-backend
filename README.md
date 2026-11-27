@@ -58,6 +58,32 @@ GROQ_API_KEY=
 PORT=7461
 ```
 
+Signups default to 10 requests per client IP per 15 minutes. Sign-in defaults to
+10 requests per client IP and username in the same window. These counters are
+process-local. Before deploying behind a reverse proxy, verify the hop count and
+set `AUTH_TRUST_PROXY_HOPS` accordingly. Leave it unset for direct local access.
+
+### Account email and recovery
+
+New signups require email verification once account email is configured. Users
+still log in with their usernames. Existing accounts can sign in normally and add
+a recovery address from **Account email**. Users who have never verified an email
+cannot use self-service recovery.
+
+1. Verify `auth.umairiqbal.tech` in Resend using its generated DNS records.
+2. Create a sending-only API key for the verified domain. Keep the key in backend
+   hosting secrets. Set `RESEND_API_KEY` on the backend only.
+3. Set `ACCOUNT_EMAIL_FROM` to `Leonis <accounts@auth.umairiqbal.tech>` and
+   `ACCOUNT_EMAIL_ORIGIN` to `https://pawpal.umairiqbal.tech`. Keep Resend click
+   tracking disabled for these account links.
+4. Apply the account email migration and release the frontend and backend with
+   sending settings unset. Enable the three settings after both releases are
+   ready, then verify signup and recovery with an authorized test account.
+
+Verification links last 24 hours and require the account password. Reset links
+last 30 minutes, are single-use, and invalidate earlier sessions after a password
+change. Keep the existing username and account IDs when linking an address.
+
 With `DATABASE_URL` configured for a dedicated development database, apply the
 checked-in migrations, then start dev:
 

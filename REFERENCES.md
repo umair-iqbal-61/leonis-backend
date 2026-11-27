@@ -177,3 +177,15 @@ No production settings, secrets, migrations or deployments were changed.
 - The password-reset script targets its configured database. The owner initially reset the separate development database, then successfully reset the existing live account using a temporary production connection override with dotenv disabled. No `.env` edits or password sharing were requested.
 - The supplied command checked the confirmed production endpoint/database before running `scripts/resetPassword.js umairiqbal`. The owner confirmed the new password works on the live website.
 - **Limits:** the existing reset script remains untracked. Login was confirmed by the owner; remaining authenticated features were not independently rechecked after release. See [release results](docs/v2-release-results.md).
+
+### Account safeguards
+
+**Checked:** 27 November 2026.
+
+- [OWASP Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html) informs the minimum length for new passwords and login throttling in the account routes. Legacy passwords are still checked against their existing hashes.
+- [Express proxy guidance](https://expressjs.com/en/guide/behind-proxies/) informs the configurable proxy hop count used by the API rate limits. Local testing uses direct access. Production proxy configuration must be verified before deployment; the counters are process-local.
+
+### Email verification and password reset
+
+- [Resend Send Email API](https://resend.com/docs/api-reference/emails/send-email) and [verified domains](https://resend.com/docs/dashboard/domains/introduction) inform the native HTTPS client and sender setup. Leonis sends email addresses and account links through Resend. Local tests capture delivery requests and do not verify DNS or inbox delivery.
+- [OWASP Forgot Password Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html) informs generic recovery responses, expiry, single-use tokens and session invalidation. Account tokens are stored as hashes and sent only through email.

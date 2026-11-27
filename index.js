@@ -22,6 +22,9 @@ import accountRoutes from './src/routes/accountRoutes.js'
 
 const app = express()
 const PORT = process.env.PORT || 7461
+const proxyHops = Number(process.env.AUTH_TRUST_PROXY_HOPS ?? 0)
+if (!Number.isInteger(proxyHops) || proxyHops < 0 || proxyHops > 10) throw new Error('AUTH_TRUST_PROXY_HOPS must be an integer from 0 to 10.')
+if (proxyHops > 0) app.set('trust proxy', proxyHops)
 
 app.use(cors({
   origin: ['https://pawpal.umairiqbal.tech', 'http://localhost:5173']
