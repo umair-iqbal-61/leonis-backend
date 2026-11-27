@@ -7,8 +7,25 @@ export function accountEmail(value) {
   return email.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : null
 }
 
+export function accountUsername(value) {
+  const name = typeof value === 'string' ? value.trim() : ''
+  return /^[\p{L}\p{N}][\p{L}\p{M}\p{N}._-]{2,63}$/u.test(name) ? name.toLowerCase() : null
+}
+
+export const clearPendingEmail = {
+  pendingEmail: null,
+  verificationTokenHash: null,
+  emailChangeApprovalHash: null,
+  verificationExpiresAt: null,
+}
+
+export const clearPasswordReset = {
+  passwordResetTokenHash: null,
+  passwordResetExpiresAt: null,
+}
+
 export function validNewPassword(password) {
-  return typeof password === 'string' && [...password].length >= 15 && Boolean(password.trim()) && Buffer.byteLength(password, 'utf8') <= 72
+  return typeof password === 'string' && [...password].length >= 8 && Boolean(password.trim()) && Buffer.byteLength(password, 'utf8') <= 72
 }
 
 export const hashAccountToken = token => createHash('sha256').update(token).digest('hex')

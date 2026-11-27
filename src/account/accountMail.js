@@ -26,11 +26,12 @@ export function newVerification(email) {
 export async function sendAccountMail(to, token, purpose) {
   const config = settings()
   if (!config) return false
-  const verify = purpose === 'verify'
-  const subject = verify ? 'Verify your Leonis email' : 'Reset your Leonis password'
-  const link = new URL(verify ? '/verify-email' : '/reset-password', config.origin)
+  const reset = purpose === 'reset'
+  const approval = purpose === 'approve-change'
+  const subject = reset ? 'Reset your Leonis password' : approval ? 'Approve your Leonis email change' : 'Verify your Leonis email'
+  const link = new URL(reset ? '/reset-password' : '/verify-email', config.origin)
   link.hash = new URLSearchParams({ token }).toString()
-  const duration = verify ? '24 hours' : '30 minutes'
+  const duration = reset ? '30 minutes' : '24 hours'
   try {
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',

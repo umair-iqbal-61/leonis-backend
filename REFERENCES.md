@@ -189,3 +189,7 @@ No production settings, secrets, migrations or deployments were changed.
 
 - [Resend Send Email API](https://resend.com/docs/api-reference/emails/send-email) and [verified domains](https://resend.com/docs/dashboard/domains/introduction) inform the native HTTPS client and sender setup. Leonis sends email addresses and account links through Resend. Local tests capture delivery requests and do not verify DNS or inbox delivery.
 - [OWASP Forgot Password Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html) informs generic recovery responses, expiry, single-use tokens and session invalidation. Account tokens are stored as hashes and sent only through email.
+
+### Settings credential changes
+
+- [OWASP Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#changing-a-users-registered-email-address) informs password re-entry for credential changes and separate approval links for the current and proposed email. The active recovery address stays in place until both links are confirmed. Password changes rotate session credentials and clear outstanding recovery links.

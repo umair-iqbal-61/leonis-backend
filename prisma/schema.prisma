@@ -27,6 +27,7 @@ model User {
   pendingEmail String?
   requiresEmailVerification Boolean @default(false)
   verificationTokenHash String? @unique
+  emailChangeApprovalHash String? @unique
   verificationExpiresAt DateTime?
   passwordResetTokenHash String? @unique
   passwordResetExpiresAt DateTime?

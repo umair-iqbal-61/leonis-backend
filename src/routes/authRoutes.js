@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import prisma from '../lib/prisma.js'
 import { signupWorkspace } from '../account/workspaces.js'
 import { authThrottle } from '../account/authThrottle.js'
-import { accountEmail, issueSession, validNewPassword } from '../account/accountCredentials.js'
+import { accountEmail, accountUsername, issueSession, validNewPassword } from '../account/accountCredentials.js'
 import { accountEmailEnabled, newVerification, sendAccountMail } from '../account/accountMail.js'
 import accountRecoveryRoutes from './accountRecoveryRoutes.js'
 
@@ -18,13 +18,13 @@ const loginThrottle = authThrottle(10, req => {
 
 router.post('/register', registerThrottle, async (req, res) => {
   const { username, password, workspace, email } = req.body ?? {}
-  const name = typeof username === 'string' ? username.trim() : ''
+  const canonicalName = accountUsername(username)
 
-  if (!/^[\p{L}\p{N}][\p{L}\p{M}\p{N}._-]{2,63}$/u.test(name)) {
+  if (!canonicalName) {
     return res.status(400).json({ code: 'INVALID_USERNAME', message: 'Use 3–64 letters, numbers, dots, underscores or hyphens. Start with a letter or number.' })
   }
   if (!validNewPassword(password)) {
-    return res.status(400).json({ code: 'INVALID_PASSWORD', message: 'Use at least 15 characters and no more than 72 bytes.' })
+    return res.status(400).json({ code: 'INVALID_PASSWORD', message: 'Use at least 8 characters and no more than 72 bytes.' })
   }
 
   const preferences = signupWorkspace(workspace)
@@ -36,7 +36,6 @@ router.post('/register', registerThrottle, async (req, res) => {
   }
 
   try {
-    const canonicalName = name.toLowerCase()
     const existing = await prisma.user.findFirst({ where: { username: { equals: canonicalName, mode: 'insensitive' } }, select: { id: true } })
     if (existing) return res.status(409).json({ code: 'USERNAME_TAKEN', message: 'Username already taken.' })
     if (requiresEmailVerification && await prisma.user.findUnique({ where: { email: address }, select: { id: true } })) {

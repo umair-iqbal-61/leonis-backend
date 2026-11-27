@@ -66,8 +66,9 @@ set `AUTH_TRUST_PROXY_HOPS` accordingly. Leave it unset for direct local access.
 ### Account email and recovery
 
 New signups require email verification once account email is configured. Users
-still log in with their usernames. Existing accounts can sign in normally and add
-a recovery address from **Account email**. Users who have never verified an email
+still log in with their usernames. New passwords require at least 8 characters
+and support up to 72 UTF-8 bytes. Existing accounts can sign in normally and add
+a recovery address from **Settings → Account**. Users who have never verified an email
 cannot use self-service recovery.
 
 1. Verify `auth.umairiqbal.tech` in Resend using its generated DNS records.
@@ -82,7 +83,13 @@ cannot use self-service recovery.
 
 Verification links last 24 hours and require the account password. Reset links
 last 30 minutes, are single-use, and invalidate earlier sessions after a password
-change. Keep the existing username and account IDs when linking an address.
+change.
+
+In **Settings → Account**, signed-in users can change their username or password
+with their current password. Changing a password keeps the current session
+signed in with a new token and ends older sessions. To replace a verified email,
+confirm both the current and proposed addresses within 24 hours. The current
+email continues receiving recovery links until both confirmations succeed.
 
 With `DATABASE_URL` configured for a dedicated development database, apply the
 checked-in migrations, then start dev:
